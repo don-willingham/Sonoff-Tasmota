@@ -42,7 +42,7 @@ typedef union {                            // Restricted by MISRA-C Rule 18.4 bu
     uint32_t spare17 : 1;
     uint32_t spare18 : 1;
     uint32_t spare19 : 1;
-    uint32_t spare20 : 1;
+    uint32_t voltage_resolution : 1;
     uint32_t emulation : 2;
     uint32_t energy_resolution : 3;
     uint32_t pressure_resolution : 2;
@@ -202,6 +202,9 @@ struct SYSCFG {
   unsigned long pCounter[MAX_COUNTERS];
   uint16_t      pCounterType;
   uint16_t      pCounterDebounce;
+
+  // 5.4.1
+  uint8_t       sfb_code[17][9];
 
 } sysCfg;
 

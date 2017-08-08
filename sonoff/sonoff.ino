@@ -25,7 +25,7 @@
     - Select IDE Tools - Flash Size: "1M (no SPIFFS)"
   ====================================================*/
 
-#define VERSION                0x05040000  // 5.4.0
+#define VERSION                0x05050100  // 5.5.1
 
 enum log_t   {LOG_LEVEL_NONE, LOG_LEVEL_ERROR, LOG_LEVEL_INFO, LOG_LEVEL_DEBUG, LOG_LEVEL_DEBUG_MORE, LOG_LEVEL_ALL};
 enum week_t  {Last, First, Second, Third, Fourth};
@@ -159,7 +159,7 @@ enum opt_t   {P_HOLD_TIME, P_MAX_POWER_RETRY, P_MAX_PARAM8};   // Index in sysCf
 
 #include <PubSubClient.h>                   // MQTT
 #ifndef MESSZ
-  #define MESSZ                360          // Max number of characters in JSON message string (4 x DS18x20 sensors)
+  #define MESSZ                368          // Max number of characters in JSON message string (4 x DS18x20 sensors)
 #endif
 #if (MQTT_MAX_PACKET_SIZE -TOPSZ -7) < MESSZ  // If the max message size is too small, throw an error at compile time
                                             // See pubsubclient.c line 359
@@ -1111,47 +1111,6 @@ void mqttDataCb(char* topic, byte* data, unsigned int data_len)
       }
       snprintf_P(svalue, sizeof(svalue), PSTR("{\"SetOption%d\":\"%s\"}"), (ptype) ? index +32 : index, (ptype) ? stemp1 : getStateText(bitRead(sysCfg.flag.data, index)));
     }
-
-// To be removed in near future
-    else if (!strcmp_P(type,PSTR("SAVESTATE"))) {
-      if ((payload >= 0) && (payload <= 1)) {
-        sysCfg.flag.savestate = payload;
-      }
-      snprintf_P(svalue, sizeof(svalue), PSTR("{\"SaveState\":\"%s\"}"), getStateText(sysCfg.flag.savestate));
-    }
-    else if (!strcmp_P(type,PSTR("BUTTONRESTRICT"))) {
-      if ((payload >= 0) && (payload <= 1)) {
-        sysCfg.flag.button_restrict = payload;
-      }
-      snprintf_P(svalue, sizeof(svalue), PSTR("{\"ButtonRestrict\":\"%s\"}"), getStateText(sysCfg.flag.button_restrict));
-    }
-    else if (!strcmp_P(type,PSTR("UNITS"))) {
-      if ((payload >= 0) && (payload <= 1)) {
-        sysCfg.flag.value_units = payload;
-      }
-      snprintf_P(svalue, sizeof(svalue), PSTR("{\"Units\":\"%s\"}"), getStateText(sysCfg.flag.value_units));
-    }
-    else if (!strcmp_P(type,PSTR("TEMPUNIT"))) {
-      if ((payload >= 0) && (payload <= 1)) {
-        sysCfg.flag.temperature_conversion = payload;
-      }
-      snprintf_P(svalue, sizeof(svalue), PSTR("{\"TempUnit\":\"%s\"}"), (sysCfg.flag.temperature_conversion) ? "Fahrenheit" : "Celsius");
-    }
-    else if (!strcmp_P(type,PSTR("MQTT"))) {
-      if ((payload >= 0) && (payload <= 1)) {
-        sysCfg.flag.mqtt_enabled = payload;
-        restartflag = 2;
-      }
-      snprintf_P(svalue, sizeof(svalue), PSTR("{\"Mqtt\":\"%s\"}"), getStateText(sysCfg.flag.mqtt_enabled));
-    }
-    else if (!strcmp_P(type,PSTR("MQTTRESPONSE"))) {
-      if ((payload >= 0) && (payload <= 1)) {
-        sysCfg.flag.mqtt_response = payload;
-      }
-      snprintf_P(svalue, sizeof(svalue), PSTR("{\"MqttResponse\":\"%s\"}"), getStateText(sysCfg.flag.mqtt_response));
-    }
-// Until here
-
     else if (!strcmp_P(type,PSTR("TEMPRES"))) {
       if ((payload >= 0) && (payload <= 3)) {
         sysCfg.flag.temperature_resolution = payload;
@@ -1169,6 +1128,12 @@ void mqttDataCb(char* topic, byte* data, unsigned int data_len)
         sysCfg.flag.pressure_resolution = payload;
       }
       snprintf_P(svalue, sizeof(svalue), PSTR("{\"PressRes\":%d}"), sysCfg.flag.pressure_resolution);
+    }
+    else if (!strcmp_P(type,PSTR("VOLTRES"))) {
+      if ((payload >= 0) && (payload <= 1)) {
+        sysCfg.flag.voltage_resolution = payload;
+      }
+      snprintf_P(svalue, sizeof(svalue), PSTR("{\"VoltRes\":%d}"), sysCfg.flag.voltage_resolution);
     }
     else if (!strcmp_P(type,PSTR("ENERGYRES"))) {
       if ((payload >= 0) && (payload <= 5)) {
@@ -1567,29 +1532,16 @@ void mqttDataCb(char* topic, byte* data, unsigned int data_len)
       snprintf_P(svalue, sizeof(svalue), PSTR("{\"LedState\":%d}"), sysCfg.ledstate);
     }
     else if (!strcmp_P(type,PSTR("CFGDUMP"))) {
-      uint16_t srow = 0;
-      uint16_t mrow = 0;
-      if (data_len > 0) {
-        srow = payload16;
-        byte i = 0;
-        while (isdigit(dataBuf[i])) {
-          i++;
-        }
-        if (i < strlen(dataBuf)) {
-          mrow = atoi(dataBuf +i);
-        }
-        if (0 == mrow) {
-          mrow = payload16;
-          srow = 0;
-        }
-      }
-      CFG_Dump(srow, mrow);
+      CFG_Dump(dataBuf);
       snprintf_P(svalue, sizeof(svalue), PSTR("{\"CfgDump\":\"Done\"}"));
     }
     else if (sysCfg.flag.mqtt_enabled && mqtt_command(grpflg, type, index, dataBuf, data_len, payload, svalue, sizeof(svalue))) {
       // Serviced
     }
     else if (hlw_flg && hlw_command(type, index, dataBuf, data_len, payload, svalue, sizeof(svalue))) {
+      // Serviced
+    }
+    else if ((SONOFF_BRIDGE == sysCfg.module) && sb_command(type, index, dataBuf, data_len, payload, svalue, sizeof(svalue))) {
       // Serviced
     }
 #ifdef USE_I2C
@@ -1661,7 +1613,7 @@ boolean send_button_power(byte key, byte device, byte state)
     if (9 == state) {
       svalue[0] = '\0';
     } else {
-      if (!strcmp(sysCfg.mqtt_topic, key_topic) && (2 == state)) {
+      if ((!strcmp(sysCfg.mqtt_topic, key_topic) || !strcmp(sysCfg.mqtt_grptopic, key_topic)) && (2 == state)) {
         state = ~(power >> (device -1)) & 0x01;
       }
       snprintf_P(svalue, sizeof(svalue), PSTR("%s"), getStateText(state));
@@ -1816,8 +1768,8 @@ void publish_status(uint8_t payload)
   }
 
   if ((0 == payload) || (3 == payload)) {
-    snprintf_P(svalue, sizeof(svalue), PSTR("{\"StatusLOG\":{\"Seriallog\":%d, \"Weblog\":%d, \"Syslog\":%d, \"LogHost\":\"%s\", \"SSId1\":\"%s\", \"SSId2\":\"%s\", \"TelePeriod\":%d}}"),
-      sysCfg.seriallog_level, sysCfg.weblog_level, sysCfg.syslog_level, sysCfg.syslog_host, sysCfg.sta_ssid[0], sysCfg.sta_ssid[1], sysCfg.tele_period);
+    snprintf_P(svalue, sizeof(svalue), PSTR("{\"StatusLOG\":{\"Seriallog\":%d, \"Weblog\":%d, \"Syslog\":%d, \"LogHost\":\"%s\", \"SSId1\":\"%s\", \"SSId2\":\"%s\", \"TelePeriod\":%d, \"Option\":\"%08X\"}}"),
+      sysCfg.seriallog_level, sysCfg.weblog_level, sysCfg.syslog_level, sysCfg.syslog_host, sysCfg.sta_ssid[0], sysCfg.sta_ssid[1], sysCfg.tele_period, sysCfg.flag.data);
     mqtt_publish_topic_P(option, PSTR("STATUS3"), svalue);
   }
 
@@ -1828,7 +1780,7 @@ void publish_status(uint8_t payload)
   }
 
   if ((0 == payload) || (5 == payload)) {
-    snprintf_P(svalue, sizeof(svalue), PSTR("{\"StatusNET\":{\"Host\":\"%s\", \"IP\":\"%s\", \"Gateway\":\"%s\", \"Subnetmask\":\"%s\", \"DNSServer\":\"%s\", \"Mac\":\"%s\", \"Webserver\":%d, \"WifiConfig\":%d}}"),
+    snprintf_P(svalue, sizeof(svalue), PSTR("{\"StatusNET\":{\"Hostname\":\"%s\", \"IPaddress\":\"%s\", \"Gateway\":\"%s\", \"Subnetmask\":\"%s\", \"DNSServer\":\"%s\", \"Mac\":\"%s\", \"Webserver\":%d, \"WifiConfig\":%d}}"),
       Hostname, WiFi.localIP().toString().c_str(), IPAddress(sysCfg.ip_address[1]).toString().c_str(), IPAddress(sysCfg.ip_address[2]).toString().c_str(), IPAddress(sysCfg.ip_address[3]).toString().c_str(),
       WiFi.macAddress().c_str(), sysCfg.webserver, sysCfg.sta_config);
     mqtt_publish_topic_P(option, PSTR("STATUS5"), svalue);
@@ -1910,7 +1862,12 @@ void sensors_mqttPresent(char* svalue, uint16_t ssvalue, uint8_t* djson)
   counter_mqttPresent(svalue, ssvalue, djson);
 #ifndef USE_ADC_VCC
   if (pin[GPIO_ADC0] < 99) {
-    snprintf_P(svalue, ssvalue, PSTR("%s, \"AnalogInput0\":%d"), svalue, analogRead(A0));
+    uint16_t alr = 0;
+    for (byte i = 0; i < 32; i++) {
+      alr += analogRead(A0);
+      delay(1);
+    }
+    snprintf_P(svalue, ssvalue, PSTR("%s, \"AnalogInput0\":%d"), svalue, alr >> 5);
     *djson = 1;
   }
 #endif
@@ -2089,6 +2046,7 @@ void button_handler()
   char log[LOGSZ];
 
   for (byte i = 0; i < Maxdevice; i++) {
+    button = NOT_PRESSED;
     butt_present = 0;
 
     if (!i && ((SONOFF_DUAL == sysCfg.module) || (CH4 == sysCfg.module))) {
@@ -2101,8 +2059,6 @@ void button_handler()
           holdbutton[i] = (sysCfg.param[P_HOLD_TIME] * (STATES / 10)) -1;
         }
         ButtonCode = 0;
-      } else {
-        button = NOT_PRESSED;
       }
     } else {
       if ((pin[GPIO_KEY1 +i] < 99) && !blockgpio0) {
@@ -2209,8 +2165,8 @@ void button_handler()
           }
         }
       }
-      lastbutton[i] = button;
     }
+    lastbutton[i] = button;
   }
 }
 
@@ -2314,7 +2270,6 @@ void stateloop()
  * Every 0.1 second
 \*-------------------------------------------------------------------------------------------*/
 
-//  if (0 == (state & 1)) {
   if (!(state % (STATES/10))) {
 
     if (mqtt_cmnd_publish) {
@@ -2352,16 +2307,6 @@ void stateloop()
       }
     }
 
-    if (sfl_flg) {  // Sonoff BN-SZ01 or Sonoff Led
-      sl_animate();
-    }
-
-#ifdef USE_WS2812
-    if (pin[GPIO_WS2812] < 99) {
-      ws2812_animate();
-    }
-#endif  // USE_WS2812
-
     // Backlog
     if (blogdelay) {
       blogdelay--;
@@ -2386,6 +2331,16 @@ void stateloop()
 
   button_handler();
   switch_handler();
+
+  if (sfl_flg) {  // Sonoff BN-SZ01 or Sonoff Led
+    sl_animate();
+  }
+
+#ifdef USE_WS2812
+  if (pin[GPIO_WS2812] < 99) {
+    ws2812_animate();
+  }
+#endif  // USE_WS2812
 
 /*-------------------------------------------------------------------------------------------*\
  * Every 0.2 second
@@ -2539,7 +2494,10 @@ void serial()
     yield();
     SerialInByte = Serial.read();
 
-    // Sonoff dual 19200 baud serial interface
+/*-------------------------------------------------------------------------------------------*\
+ * Sonoff dual 19200 baud serial interface
+\*-------------------------------------------------------------------------------------------*/
+
     if (Hexcode) {
       Hexcode--;
       if (Hexcode) {
@@ -2547,17 +2505,29 @@ void serial()
         SerialInByte = 0;
       } else {
         if (SerialInByte != 0xA1) {
-          ButtonCode = 0;  // 0xA1 - End of Sonoff dual button code
+          ButtonCode = 0;                    // 0xA1 - End of Sonoff dual button code
         }
       }
     }
-    if (0xA0 == SerialInByte) {                    // 0xA0 - Start of Sonoff dual button code
+    if (0xA0 == SerialInByte) {              // 0xA0 - Start of Sonoff dual button code
       SerialInByte = 0;
       ButtonCode = 0;
       Hexcode = 3;
     }
 
-    if (SerialInByte > 127) { // binary data...
+/*-------------------------------------------------------------------------------------------*\
+ * Sonoff bridge 19200 baud serial interface
+\*-------------------------------------------------------------------------------------------*/
+
+    if (sb_serial()) {
+      SerialInByteCounter = 0;
+      Serial.flush();
+      return;
+    }
+
+/*-------------------------------------------------------------------------------------------*/
+
+    if (SerialInByte > 127) {                // binary data...
       SerialInByteCounter = 0;
       Serial.flush();
       return;
@@ -2570,7 +2540,7 @@ void serial()
       }
     }
 
-    if (SerialInByte == '\x1B') {  // Sonoff SC status from ATMEGA328P
+    if (SerialInByte == '\x1B') {            // Sonoff SC status from ATMEGA328P
       serialInBuf[SerialInByteCounter] = 0;  // serial data completed
       sc_rcvstat(serialInBuf);
       SerialInByteCounter = 0;
@@ -2656,6 +2626,9 @@ void GPIO_init()
   analogWriteFreq(PWM_FREQ);    // Default is 1000 (core_esp8266_wiring_pwm.c)
 
   Maxdevice = 1;
+  if (SONOFF_BRIDGE == sysCfg.module) {
+    Baudrate = 19200;
+  }
   if (SONOFF_DUAL == sysCfg.module) {
     Maxdevice = 2;
     Baudrate = 19200;
@@ -2681,12 +2654,15 @@ void GPIO_init()
         pinMode(pin[GPIO_REL1 +i], OUTPUT);
         Maxdevice++;
       }
-      if (pin[GPIO_KEY1 +i] < 99) {
-        pinMode(pin[GPIO_KEY1 +i], INPUT_PULLUP);
-      }
+//      if (pin[GPIO_KEY1 +i] < 99) {
+//        pinMode(pin[GPIO_KEY1 +i], INPUT_PULLUP);
+//      }
     }
   }
   for (byte i = 0; i < 4; i++) {
+    if (pin[GPIO_KEY1 +i] < 99) {
+      pinMode(pin[GPIO_KEY1 +i], INPUT_PULLUP);
+    }
     if (pin[GPIO_LED1 +i] < 99) {
       pinMode(pin[GPIO_LED1 +i], OUTPUT);
       digitalWrite(pin[GPIO_LED1 +i], led_inverted[i]);
