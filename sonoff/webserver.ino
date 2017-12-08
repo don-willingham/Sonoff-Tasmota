@@ -236,7 +236,9 @@ const char HTTP_FORM_LOG3[] PROGMEM =
 const char HTTP_FORM_OTHER[] PROGMEM =
   "<fieldset><legend><b>&nbsp;" D_OTHER_PARAMETERS "&nbsp;</b></legend><form method='get' action='sv'>"
   "<input id='w' name='w' value='5' hidden><input id='r' name='r' value='1' hidden>"
-  "<br/><b>" D_WEB_ADMIN_PASSWORD "</b><br/><input id='p1' name='p1' type='password' placeholder='" WEB_PASSWORD "' value='{p1'><br/>"
+  "<br/><b>" D_WEB_ADMIN_PASSWORD_CURR "</b><br/><input id='p1' name='p1' type='password' placeholder='' value='{p1'><br/>"
+  "<br/><b>" D_WEB_ADMIN_PASSWORD_NEW "</b><br/><input id='p2' name='p1' type='password' placeholder='' value='{p2'><br/>"
+  "<br/><b>" D_WEB_ADMIN_PASSWORD_RPT "</b><br/><input id='p3' name='p1' type='password' placeholder='' value='{p3'><br/>"
   "<br/><input style='width:10%;' id='b1' name='b1' type='checkbox'{r1><b>" D_MQTT_ENABLE "</b><br/>";
   const char HTTP_FORM_OTHER2[] PROGMEM =
   "<br/><b>" D_FRIENDLY_NAME " {1</b> ({2)<br/><input id='a{1' name='a{1' placeholder='{2' value='{3'><br/>";
