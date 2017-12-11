@@ -319,9 +319,13 @@
 #define D_TELEMETRY_PERIOD "Telemetry period"
 
 #define D_OTHER_PARAMETERS "Other parameters"
+#ifdef WEB_PASSWORD_2X
 #define D_WEB_ADMIN_PASSWORD_CURR "Current Web Admin Password"
 #define D_WEB_ADMIN_PASSWORD_NEW "New Web Admin Password"
 #define D_WEB_ADMIN_PASSWORD_RPT "Repeat Web Admin Password"
+#else
+#define D_WEB_ADMIN_PASSWORD "Repeat Web Admin Password"
+#endif
 #define D_MQTT_ENABLE "MQTT enable"
 #define D_FRIENDLY_NAME "Friendly Name"
 #define D_BELKIN_WEMO "Belkin WeMo"

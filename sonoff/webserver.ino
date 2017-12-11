@@ -236,9 +236,13 @@ const char HTTP_FORM_LOG3[] PROGMEM =
 const char HTTP_FORM_OTHER[] PROGMEM =
   "<fieldset><legend><b>&nbsp;" D_OTHER_PARAMETERS "&nbsp;</b></legend><form method='get' action='sv'>"
   "<input id='w' name='w' value='5' hidden><input id='r' name='r' value='1' hidden>"
-  "<br/><b>" D_WEB_ADMIN_PASSWORD_CURR "</b><br/><input id='p1' name='p1' type='password' placeholder='' value='{p1'><br/>"
-  "<br/><b>" D_WEB_ADMIN_PASSWORD_NEW "</b><br/><input id='p2' name='p1' type='password' placeholder='' value='{p2'><br/>"
-  "<br/><b>" D_WEB_ADMIN_PASSWORD_RPT "</b><br/><input id='p3' name='p1' type='password' placeholder='' value='{p3'><br/>"
+#ifdef WEB_PASSWORD_2X
+  "<br/><b>" D_WEB_ADMIN_PASSWORD_CURR "</b><br/><input id='p1' name='p1' type='password' placeholder='' value=''><br/>"
+  "<br/><b>" D_WEB_ADMIN_PASSWORD_NEW "</b><br/><input id='p2' name='p2' type='password' placeholder='' value=''><br/>"
+  "<br/><b>" D_WEB_ADMIN_PASSWORD_RPT "</b><br/><input id='p3' name='p3' type='password' placeholder='' value=''><br/>"
+#else
+  "<br/><b>" D_WEB_ADMIN_PASSWORD "</b><br/><input id='p1' name='p1' type='password' placeholder='" WEB_PASSWORD "' value='{p1'><br/>"
+#endif
   "<br/><input style='width:10%;' id='b1' name='b1' type='checkbox'{r1><b>" D_MQTT_ENABLE "</b><br/>";
   const char HTTP_FORM_OTHER2[] PROGMEM =
   "<br/><b>" D_FRIENDLY_NAME " {1</b> ({2)<br/><input id='a{1' name='a{1' placeholder='{2' value='{3'><br/>";
@@ -884,7 +888,9 @@ void HandleOtherConfiguration()
   String page = FPSTR(HTTP_HEAD);
   page.replace(F("{v}"), FPSTR(S_CONFIGURE_OTHER));
   page += FPSTR(HTTP_FORM_OTHER);
+#ifndef WEB_PASSWORD_2X
   page.replace(F("{p1"), Settings.web_password);
+#endif
   page.replace(F("{r1"), (Settings.flag.mqtt_enabled) ? F(" checked") : F(""));
   page += FPSTR(HTTP_FORM_OTHER2);
   page.replace(F("{1"), F("1"));
@@ -1017,7 +1023,12 @@ snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_LOG D_CMND_SERIALLOG " %d, " D
     break;
 #endif  // USE_DOMOTICZ
   case 5:
+#ifdef WEB_PASSWORD_2X
+    snprintf_P(log_data, sizeof(log_data), PSTR("%s %s %s"), WebServer->arg("p1").c_str(), WebServer->arg("p2").c_str(), WebServer->arg("p3").c_str());
+    AddLog(LOG_LEVEL_INFO);
+#else
     strlcpy(Settings.web_password, (!strlen(WebServer->arg("p1").c_str())) ? WEB_PASSWORD : (!strcmp(WebServer->arg("p1").c_str(),"0")) ? "" : WebServer->arg("p1").c_str(), sizeof(Settings.web_password));
+#endif
     Settings.flag.mqtt_enabled = WebServer->hasArg("b1");
 #ifdef USE_EMULATION
     Settings.flag2.emulation = (!strlen(WebServer->arg("b2").c_str())) ? 0 : atoi(WebServer->arg("b2").c_str());
