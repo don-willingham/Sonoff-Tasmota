@@ -1,7 +1,7 @@
 /*
   pl-PL.h - localization for Polish without fonetick - Poland for Sonoff-Tasmota
 
-  Copyright (C) 2017  Theo Arends (translated by roblad - Robert L.)
+  Copyright (C) 2018  Theo Arends (translated by roblad - Robert L.)
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -46,10 +46,8 @@
 // Common
 #define D_ABORTED "Anulowany"
 #define D_ACTIVE "Aktywny"
-#define D_ADDRESS "Adres"
 #define D_ADMIN "Admin"
 #define D_AIR_QUALITY "Jakosc powietrza"
-#define D_AIRQUALITY "JakPowietrza"
 #define D_AP "AP"                    // Access Point
 #define D_APMAC_ADDRESS "APMac"
 #define D_APPENDED "Dolaczony"
@@ -66,7 +64,7 @@
 #define D_BUTTON "Przycisk"
 #define D_BY "by"                    // Written by me
 #define D_CELSIUS "Celsiusza"
-#define D_CO2 "CO2"
+#define D_CO2 "Dwutlenku węgla"
 #define D_CODE "kod"                 // Button code
 #define D_COLDLIGHT "Zimny"
 #define D_COMMAND "Komenda"
@@ -106,7 +104,6 @@
 #define D_GATEWAY "Brama"
 #define D_GROUP "Grupa"
 #define D_HEAPSIZE "Stos"
-#define D_HIGH "Wysoki"
 #define D_HOST "Serwer"
 #define D_HOSTNAME "Nazwa serwera"
 #define D_HUMIDITY "Wilgotnosc"
@@ -118,8 +115,8 @@
 #define D_INITIALIZED "Zainicjowany"
 #define D_IP_ADDRESS "Adres IP"
 #define D_LIGHT "Swiatlo"
+#define D_LIMIT "Wartość graniczna"
 #define D_LOCAL_TIME "Lokalny"
-#define D_LOW "Niski"
 #define D_LWT "LWT"
 #define D_MAC "Mac"
 #define D_MASK "Maska"
@@ -134,12 +131,9 @@
 #define D_OK "Ok"
 #define D_ON "Wlaczony"
 #define D_ONLINE "Aktywny"
-#define D_OR "lub"
 #define D_PASSWORD "Haslo"
-#define D_PERIOD "Okres"
 #define D_PORT "Port"
 #define D_POWER_FACTOR "Wspolczynik mocy"
-#define D_POWERFACTOR "WspolczynikMocy"
 #define D_POWERUSAGE "Moc"
 #define D_PRESSURE "Cisnienie"
 #define D_PRESSUREATSEALEVEL "Cisnienie na poziomie morza"
@@ -175,20 +169,15 @@
 #define D_SUBSCRIBE_TO "Subskrybuj do"
 #define D_SUCCESSFUL "Powodzenie"
 #define D_SWITCH "Przelacznik"
-#define D_SYNC "Sync"
 #define D_SYS "System "                  // Sys log
 #define D_TEMPERATURE "Temperatura"
 #define D_TEMPERATURE_UNIT "JednTemp"
 #define D_TIME "Czas"
 #define D_TO "do"
-#define D_TODAY "Dzisiaj"
 #define D_TOGGLE "Przelacz"
 #define D_TOPIC "Temat"
-#define D_TOTAL "Suma"
 #define D_TRANSMIT "Wyslij"
 #define D_TRUE "Prawda"
-#define D_TYPE "Typ"
-#define D_UNKNOWN "Nieznany"
 #define D_UPGRADE "aktualizacji"
 #define D_UPLOAD "Wgraj"
 #define D_UPTIME "Uptime"
@@ -202,8 +191,38 @@
 #define D_WEB "Web"                  // Web log
 #define D_WEB_SERVER "Web Server"
 #define D_WIFI "Wifi"
-#define D_WRONG "Bledny"
-#define D_YESTERDAY "Wczoraj"
+
+// Text used in JSON messages
+#define D_JSON_ADDRESS "Adres"
+#define D_JSON_AIRQUALITY "JakPowietrza"
+#define D_JSON_ANALOG_INPUT "Wej_analogowe"
+#define D_JSON_CO2 "Dwutlenku węgla"
+#define D_JSON_COUNTER "Licznik"
+#define D_JSON_CURRENT "Biezacy"          // As in Voltage and Current
+#define D_JSON_DATA "Data"
+#define D_JSON_DONE "Wykonane"
+#define D_JSON_HIGH "Wysoki"
+#define D_JSON_HUMIDITY "Wilgotnosc"
+#define D_JSON_ILLUMINANCE "Oswietlenie"
+#define D_JSON_UNKNOWN "Nieznany"
+#define D_JSON_LIGHT "Swiatlo"
+#define D_JSON_LOW "Niski"
+#define D_JSON_NOISE "Halas"
+#define D_JSON_OR "lub"
+#define D_JSON_PERIOD "Okres"
+#define D_JSON_POWERFACTOR "WspolczynikMocy"
+#define D_JSON_POWERUSAGE "Moc"
+#define D_JSON_PRESSURE "Cisnienie"
+#define D_JSON_PRESSUREATSEALEVEL "Cisnienie na poziomie morza"
+#define D_JSON_SYNC "Sync"
+#define D_JSON_TEMPERATURE "Temperatura"
+#define D_JSON_TODAY "Dzisiaj"
+#define D_JSON_TOTAL "Suma"
+#define D_JSON_TYPE "Typ"
+#define D_JSON_UV_LEVEL "Poziom UV"
+#define D_JSON_VOLTAGE "Napiecie"
+#define D_JSON_WRONG "Bledny"
+#define D_JSON_YESTERDAY "Wczoraj"
 
 // settings.ino
 #define D_SAVED_TO_FLASH_AT "Zapisane do pamieci flash w"
@@ -233,7 +252,7 @@
 #define D_OSWATCH "osWatch"
 #define D_BLOCKED_LOOP "Petla zablokowana"
 #define D_WPS_FAILED_WITH_STATUS "Blad WPSconfig ze statusem"
-#define D_ACTIVE_FOR_1_MINUTE "aktywny 1 minute"
+#define D_ACTIVE_FOR_3_MINUTES "aktywny 3 minuty"
 #define D_FAILED_TO_START "nie udalo sie uruchomic"
 #define D_PATCH_ISSUE_2186 "Blad latki 2186"
 #define D_CONNECTING_TO_AP "Laczenie z AP"
@@ -392,20 +411,21 @@
   #define D_DOMOTICZ_COUNT "Licznik"
   #define D_DOMOTICZ_VOLTAGE "Napiecie"
   #define D_DOMOTICZ_CURRENT "Prad"
+  #define D_DOMOTICZ_AIRQUALITY "AirQuality"
 #define D_DOMOTICZ_UPDATE_TIMER "Zaktualizuj czasomierz"
 
 // xdrv_irremote.ino
-#define D_INVALID_JSON "Invalid JSON"
-#define D_PROTOCOL_NOT_SUPPORTED "Protokol nie jest obslugiwany"
-#define D_IR_PROTOCOL "PROTOCOL"
-#define D_IR_BITS "BITS"
-#define D_IR_DATA "DATA"
-#define D_IRHVAC_VENDOR "VENDOR"
-#define D_IRHVAC_POWER "POWER"
-#define D_IRHVAC_MODE "MODE"
-#define D_IRHVAC_FANSPEED "FANSPEED"
-#define D_IRHVAC_TEMP "TEMP"
-#define D_IRRECEIVED "IrReceived"
+#define D_JSON_INVALID_JSON "Invalid JSON"
+#define D_JSON_PROTOCOL_NOT_SUPPORTED "Protokol nie jest obslugiwany"
+#define D_JSON_IR_PROTOCOL "PROTOCOL"
+#define D_JSON_IR_BITS "BITS"
+#define D_JSON_IR_DATA "DATA"
+#define D_JSON_IRHVAC_VENDOR "VENDOR"
+#define D_JSON_IRHVAC_POWER "POWER"
+#define D_JSON_IRHVAC_MODE "MODE"
+#define D_JSON_IRHVAC_FANSPEED "FANSPEED"
+#define D_JSON_IRHVAC_TEMP "TEMP"
+#define D_JSON_IRRECEIVED "IrReceived"
 
 // xdrv_snfbridge.ino
 #define D_RFRECEIVED "RfReceived"
@@ -437,7 +457,7 @@
 #define D_HUE_POST_ARGS "Hue POST args"
 #define D_3_RESPONSE_PACKETS_SENT "3 pakiety odpowiedzi wysylane"
 
-// xsns_03_hlw8012.ino
+// xsns_03_energy.ino
 #define D_MAXPOWERREACHED "MaksMocOsiagnieta"
 #define D_MAXPOWERREACHEDRETRY "MaksMocOsiagnietaPonowienie"
 #define D_POWERMONITOR "MonitorMocy"
@@ -483,6 +503,10 @@
 #define D_SENSOR_IRRECV   "IRrecv"
 #define D_SENSOR_MHZ_RX   "MHZ Rx"
 #define D_SENSOR_MHZ_TX   "MHZ Tx"
+#define D_SENSOR_PZEM_RX  "PZEM Rx"
+#define D_SENSOR_PZEM_TX  "PZEM Tx"
+#define D_SENSOR_SAIR_RX  "SAir Rx"
+#define D_SENSOR_SAIR_TX  "SAir Tx"
 #define D_SENSOR_SPI_CS   "SPI CS"
 #define D_SENSOR_SPI_DC   "SPI DC"
 #define D_SENSOR_BACKLIGHT "BLight"
@@ -684,7 +708,7 @@
 #define D_CMND_RFLOW "RfLow"
 #define D_CMND_RFSYNC "RfSync"
 
-// Commands xsns_03_hlw8012.ino
+// Commands xsns_03_energy.ino
 #define D_CMND_POWERLOW "PowerLow"
 #define D_CMND_POWERHIGH "PowerHigh"
 #define D_CMND_VOLTAGELOW "VoltageLow"

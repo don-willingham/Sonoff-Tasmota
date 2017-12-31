@@ -1,7 +1,7 @@
 /*
   xdrv_snfbridge.ino - sonoff RF bridge 433 support for Sonoff-Tasmota
 
-  Copyright (C) 2017  Theo Arends
+  Copyright (C) 2018  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ void SonoffBridgeReceived()
             }
           }
         }
-        snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_RFRECEIVED "\":{\"" D_SYNC "\":%d,\"" D_LOW "\":%d,\"" D_HIGH "\":%d,\"" D_DATA "\":\"%06X\",\"" D_CMND_RFKEY "\":%s}}"),
+        snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_RFRECEIVED "\":{\"" D_JSON_SYNC "\":%d,\"" D_JSON_LOW "\":%d,\"" D_JSON_HIGH "\":%d,\"" D_JSON_DATA "\":\"%06X\",\"" D_CMND_RFKEY "\":%s}}"),
           sync_time, low_time, high_time, received_id, rfkey);
         MqttPublishPrefixTopic_P(6, PSTR(D_RFRECEIVED));
   #ifdef USE_DOMOTICZ

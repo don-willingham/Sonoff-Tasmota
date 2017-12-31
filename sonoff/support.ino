@@ -1,7 +1,7 @@
 /*
   support.ino - support for Sonoff-Tasmota
 
-  Copyright (C) 2017  Theo Arends
+  Copyright (C) 2018  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -434,12 +434,12 @@ void WifiConfig(uint8_t type)
       restart_flag = 2;
     }
     else if (WIFI_SMARTCONFIG == wifi_config_type) {
-      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_1_SMARTCONFIG D_ACTIVE_FOR_1_MINUTE));
+      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_1_SMARTCONFIG D_ACTIVE_FOR_3_MINUTES));
       WiFi.beginSmartConfig();
     }
     else if (WIFI_WPSCONFIG == wifi_config_type) {
       if (WifiWpsConfigBegin()) {
-        AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_3_WPSCONFIG D_ACTIVE_FOR_1_MINUTE));
+        AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_3_WPSCONFIG D_ACTIVE_FOR_3_MINUTES));
       } else {
         AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_3_WPSCONFIG D_FAILED_TO_START));
         wifi_config_counter = 3;
@@ -447,7 +447,7 @@ void WifiConfig(uint8_t type)
     }
 #ifdef USE_WEBSERVER
     else if (WIFI_MANAGER == wifi_config_type) {
-      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_2_WIFIMANAGER D_ACTIVE_FOR_1_MINUTE));
+      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_2_WIFIMANAGER D_ACTIVE_FOR_3_MINUTES));
       WifiManagerBegin();
     }
 #endif  // USE_WEBSERVER
@@ -891,6 +891,7 @@ extern "C" {
 Ticker TickerRtc;
 
 static const uint8_t kDaysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // API starts months from 1, this array starts from 0
+static const char kMonthNamesEnglish[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
 
 uint32_t utc_time = 0;
 uint32_t local_time = 0;
@@ -926,7 +927,7 @@ String GetBuildDateAndTime()
       year = atoi(str);
     }
   }
-  month = (strstr(kMonthNames, smonth) -kMonthNames) /3 +1;
+  month = (strstr(kMonthNamesEnglish, smonth) -kMonthNamesEnglish) /3 +1;
   snprintf_P(bdt, sizeof(bdt), PSTR("%d" D_YEAR_MONTH_SEPARATOR "%02d" D_MONTH_DAY_SEPARATOR "%02d" D_DATE_TIME_SEPARATOR "%s"), year, month, day, __TIME__);
   return String(bdt);
 }
@@ -1317,7 +1318,7 @@ void AdcShow(boolean json)
   analog >>= 5;
 
   if (json) {
-    snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"" D_ANALOG_INPUT "0\":%d"), mqtt_data, analog);
+    snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"" D_JSON_ANALOG_INPUT "0\":%d"), mqtt_data, analog);
 #ifdef USE_WEBSERVER
   } else {
     snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_ANALOG, mqtt_data, "", 0, analog);
@@ -1337,15 +1338,11 @@ boolean Xsns02(byte function)
 
   if (pin[GPIO_ADC0] < 99) {
     switch (function) {
-//      case FUNC_XSNS_INIT:
-//        break;
-//      case FUNC_XSNS_PREP:
-//        break;
-      case FUNC_XSNS_JSON_APPEND:
+      case FUNC_JSON_APPEND:
         AdcShow(1);
         break;
 #ifdef USE_WEBSERVER
-      case FUNC_XSNS_WEB:
+      case FUNC_WEB_APPEND:
         AdcShow(0);
         break;
 #endif  // USE_WEBSERVER

@@ -1,7 +1,7 @@
 /*
   i18n.h - internationalization for Sonoff-Tasmota
 
-  Copyright (C) 2017  Theo Arends
+  Copyright (C) 2018  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -33,12 +33,14 @@
 enum UnitNames {
   UNIT_AMPERE,
   UNIT_HOUR,
+  UNIT_KILOOHM,
   UNIT_KILOWATTHOUR,
   UNIT_LUX,
   UNIT_MICROSECOND,
   UNIT_MILLIAMPERE,
   UNIT_MILLISECOND,
   UNIT_MINUTE,
+  UNIT_PPM,
   UNIT_PRESSURE,
   UNIT_SECOND,
   UNIT_SECTORS,
@@ -48,12 +50,14 @@ enum UnitNames {
 const char kUnitNames[] PROGMEM =
   D_UNIT_AMPERE "|"
   D_UNIT_HOUR "|"
+  D_UNIT_KILOOHM "|"
   D_UNIT_KILOWATTHOUR "|"
   D_UNIT_LUX "|"
   D_UNIT_MICROSECOND "|"
   D_UNIT_MILLIAMPERE "|"
   D_UNIT_MILLISECOND "|"
   D_UNIT_MINUTE "|"
+  D_UNIT_PPM "|"
   D_UNIT_PRESSURE "|"
   D_UNIT_SECOND "|"
   D_UNIT_SECTORS "|"
@@ -77,7 +81,7 @@ const char S_JSON_COMMAND_INDEX_NVALUE[] PROGMEM =            "{\"%s%d\":%d}";
 const char S_JSON_COMMAND_INDEX_SVALUE[] PROGMEM =            "{\"%s%d\":\"%s\"}";
 const char S_JSON_COMMAND_INDEX_SVALUE_SVALUE[] PROGMEM =     "{\"%s%d\":\"%s%s\"}";
 
-const char JSON_SNS_TEMPHUM[] PROGMEM = "%s,\"%s\":{\"" D_TEMPERATURE "\":%s,\"" D_HUMIDITY "\":%s}";
+const char JSON_SNS_TEMPHUM[] PROGMEM = "%s,\"%s\":{\"" D_JSON_TEMPERATURE "\":%s,\"" D_JSON_HUMIDITY "\":%s}";
 
 const char S_LOG_I2C_FOUND_AT[] PROGMEM = D_LOG_I2C "%s " D_FOUND_AT " 0x%x";
 
@@ -120,6 +124,10 @@ const char HTTP_SNS_HUM[] PROGMEM = "%s{s}%s " D_HUMIDITY "{m}%s%{e}";          
 const char HTTP_SNS_PRESSURE[] PROGMEM = "%s{s}%s " D_PRESSURE "{m}%s " D_UNIT_PRESSURE "{e}";               // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
 const char HTTP_SNS_SEAPRESSURE[] PROGMEM = "%s{s}%s " D_PRESSUREATSEALEVEL "{m}%s " D_UNIT_PRESSURE "{e}";  // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
 const char HTTP_SNS_ANALOG[] PROGMEM = "%s{s}%s " D_ANALOG_INPUT "%d{m}%d{e}";                               // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
+
+#if defined(USE_MHZ19) || defined(USE_SENSEAIR)
+const char HTTP_SNS_CO2[] PROGMEM = "%s{s}%s " D_CO2 "{m}%d " D_UNIT_PPM "{e}";                              // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
+#endif  // USE_WEBSERVER
 
 const char S_MAIN_MENU[] PROGMEM = D_MAIN_MENU;
 const char S_CONFIGURATION[] PROGMEM = D_CONFIGURATION;

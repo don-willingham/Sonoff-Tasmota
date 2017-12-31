@@ -1,7 +1,7 @@
 /*
   nl-NL.h - localization for Dutch - Nederland for Sonoff-Tasmota
 
-  Copyright (C) 2017  Theo Arends
+  Copyright (C) 2018  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -46,10 +46,8 @@
 // Common
 #define D_ABORTED "Afgebroken"
 #define D_ACTIVE "Actief"
-#define D_ADDRESS "Adres"
 #define D_ADMIN "Admin"
 #define D_AIR_QUALITY "Lucht kwalitiet"
-#define D_AIRQUALITY "LuchtKwaliteit"
 #define D_AP "AP"                    // Access Point
 #define D_APMAC_ADDRESS "APMac"
 #define D_APPENDED "Aangevuld"
@@ -66,7 +64,7 @@
 #define D_BUTTON "DrukKnop"
 #define D_BY "door"                  // Written by me
 #define D_CELSIUS "Celsius"
-#define D_CO2 "CO2"
+#define D_CO2 "Koolstofdioxide"
 #define D_CODE "code"                // Button code
 #define D_COLDLIGHT "Koud"
 #define D_COMMAND "Opdracht"
@@ -106,7 +104,6 @@
 #define D_GATEWAY "Gateway"
 #define D_GROUP "Groep"
 #define D_HEAPSIZE "Heap"
-#define D_HIGH "Hoog"
 #define D_HOST "Host"
 #define D_HOSTNAME "Hostnaam"
 #define D_HUMIDITY "Luchtvochtigheid"
@@ -117,9 +114,9 @@
 #define D_INFO "Info"
 #define D_INITIALIZED "Geinitialiseerd"
 #define D_IP_ADDRESS "IP Adres"
-#define D_LIGHT "Ligt"
+#define D_LIGHT "Licht"
+#define D_LIMIT "Grenswaarde"
 #define D_LOCAL_TIME "Plaatselijk"
-#define D_LOW "Laag"
 #define D_LWT "LWT"
 #define D_MAC "Mac"
 #define D_MASK "Masker"
@@ -134,12 +131,9 @@
 #define D_OK "Ok"
 #define D_ON "Ann"
 #define D_ONLINE "Online"
-#define D_OR "of"
 #define D_PASSWORD "Wachtwoord"
-#define D_PERIOD "Periode"
 #define D_PORT "Poort"
 #define D_POWER_FACTOR "Arbeidsfactor"
-#define D_POWERFACTOR "Factor"
 #define D_POWERUSAGE "Vermogen"
 #define D_PRESSURE "Luchtdruk"
 #define D_PRESSUREATSEALEVEL "ZeeLuchtdruk"
@@ -175,20 +169,15 @@
 #define D_SUBSCRIBE_TO "Abonneer op"
 #define D_SUCCESSFUL "Gelukt"
 #define D_SWITCH "Schakelaar"
-#define D_SYNC "Sync"
 #define D_SYS "Sys"                  // Sys log
 #define D_TEMPERATURE "Temperatuur"
 #define D_TEMPERATURE_UNIT "TempEenheid"
 #define D_TIME "Tijd"
 #define D_TO "naar"
-#define D_TODAY "Vandaag"
 #define D_TOGGLE "Toggle"  // Wissel, Tuimel
 #define D_TOPIC "Topic"  // Onderwerp
-#define D_TOTAL "Totaal"
 #define D_TRANSMIT "Verzend"
 #define D_TRUE "Waar"
-#define D_TYPE "Soort"
-#define D_UNKNOWN "Onbekend"
 #define D_UPGRADE "opwaarderen"
 #define D_UPLOAD "Verzenden"
 #define D_UPTIME "Bedrijfstijd"
@@ -202,8 +191,38 @@
 #define D_WEB "Web"                  // Web log
 #define D_WEB_SERVER "Webserver"
 #define D_WIFI "Wifi"
-#define D_WRONG "Fout"
-#define D_YESTERDAY "Gisteren"
+
+// Text used in JSON messages
+#define D_JSON_ADDRESS "Adres"
+#define D_JSON_AIRQUALITY "LuchtKwaliteit"
+#define D_JSON_ANALOG_INPUT "Analoog"
+#define D_JSON_CO2 "Koolstofdioxide"
+#define D_JSON_COUNTER "Teller"
+#define D_JSON_CURRENT "Stroom"          // As in Voltage and Current
+#define D_JSON_DATA "Data"
+#define D_JSON_DONE "Klaar"
+#define D_JSON_HIGH "Hoog"
+#define D_JSON_HUMIDITY "Luchtvochtigheid"
+#define D_JSON_ILLUMINANCE "Verlichtingssterkte"
+#define D_JSON_UNKNOWN "Onbekend"
+#define D_JSON_LIGHT "Licht"
+#define D_JSON_LOW "Laag"
+#define D_JSON_NOISE "Lawaai"
+#define D_JSON_OR "of"
+#define D_JSON_PERIOD "Periode"
+#define D_JSON_POWERFACTOR "Factor"
+#define D_JSON_POWERUSAGE "Vermogen"
+#define D_JSON_PRESSURE "Luchtdruk"
+#define D_JSON_PRESSUREATSEALEVEL "ZeeLuchtdruk"
+#define D_JSON_SYNC "Sync"
+#define D_JSON_TEMPERATURE "Temperatuur"
+#define D_JSON_TODAY "Vandaag"
+#define D_JSON_TOTAL "Totaal"
+#define D_JSON_TYPE "Soort"
+#define D_JSON_UV_LEVEL "UV niveau"
+#define D_JSON_VOLTAGE "Spanning"
+#define D_JSON_WRONG "Fout"
+#define D_JSON_YESTERDAY "Gisteren"
 
 // settings.ino
 #define D_SAVED_TO_FLASH_AT "Opgeslagen in flash op"
@@ -233,7 +252,7 @@
 #define D_OSWATCH "osWatch"
 #define D_BLOCKED_LOOP "Blocked Loop"
 #define D_WPS_FAILED_WITH_STATUS "WPSconfig mislukt met status"
-#define D_ACTIVE_FOR_1_MINUTE "1 minuut actief"
+#define D_ACTIVE_FOR_3_MINUTES "3 minuten actief"
 #define D_FAILED_TO_START "mislukt"
 #define D_PATCH_ISSUE_2186 "Patch issue 2186"
 #define D_CONNECTING_TO_AP "Verbinden met AP"
@@ -392,20 +411,21 @@
   #define D_DOMOTICZ_COUNT "Count"
   #define D_DOMOTICZ_VOLTAGE "Spanning"
   #define D_DOMOTICZ_CURRENT "Stroom"
+  #define D_DOMOTICZ_AIRQUALITY "AirQuality"
 #define D_DOMOTICZ_UPDATE_TIMER "Bijwerk timer"
 
 // xdrv_irremote.ino
-#define D_INVALID_JSON "Ongeldig JSON"
-#define D_PROTOCOL_NOT_SUPPORTED "Protocol wordt niet ondersteund"
-#define D_IR_PROTOCOL "PROTOCOL"
-#define D_IR_BITS "BITS"
-#define D_IR_DATA "DATA"
-#define D_IRHVAC_VENDOR "VENDOR"
-#define D_IRHVAC_POWER "POWER"
-#define D_IRHVAC_MODE "MODE"
-#define D_IRHVAC_FANSPEED "FANSPEED"
-#define D_IRHVAC_TEMP "TEMP"
-#define D_IRRECEIVED "IrReceived"
+#define D_JSON_INVALID_JSON "Ongeldig JSON"
+#define D_JSON_PROTOCOL_NOT_SUPPORTED "Protocol wordt niet ondersteund"
+#define D_JSON_IR_PROTOCOL "PROTOCOL"
+#define D_JSON_IR_BITS "BITS"
+#define D_JSON_IR_DATA "DATA"
+#define D_JSON_IRHVAC_VENDOR "VENDOR"
+#define D_JSON_IRHVAC_POWER "POWER"
+#define D_JSON_IRHVAC_MODE "MODE"
+#define D_JSON_IRHVAC_FANSPEED "FANSPEED"
+#define D_JSON_IRHVAC_TEMP "TEMP"
+#define D_JSON_IRRECEIVED "IrReceived"
 
 // xdrv_snfbridge.ino
 #define D_RFRECEIVED "RfReceived"
@@ -437,7 +457,7 @@
 #define D_HUE_POST_ARGS "Hue POST argumenten"
 #define D_3_RESPONSE_PACKETS_SENT "3 antwoord paketten verstuurd"
 
-// xsns_03_hlw8012.ino
+// xsns_03_energy.ino
 #define D_MAXPOWERREACHED "MaxPowerReached"
 #define D_MAXPOWERREACHEDRETRY "MaxPowerReachedRetry"
 #define D_POWERMONITOR "PowerMonitor"
@@ -480,9 +500,13 @@
 #define D_SENSOR_LED      "Led"     // Suffix "1i"
 #define D_SENSOR_PWM      "PWM"     // Suffix "1"
 #define D_SENSOR_COUNTER  "Teller"  // Suffix "1"
+#define D_SENSOR_IRRECV   "IRrecv"
 #define D_SENSOR_MHZ_RX   "MHZ Rx"
 #define D_SENSOR_MHZ_TX   "MHZ Tx"
-#define D_SENSOR_IRRECV   "IRrecv"
+#define D_SENSOR_PZEM_RX  "PZEM Rx"
+#define D_SENSOR_PZEM_TX  "PZEM Tx"
+#define D_SENSOR_SAIR_RX  "SAir Rx"
+#define D_SENSOR_SAIR_TX  "SAir Tx"
 #define D_SENSOR_SPI_CS   "SPI CS"
 #define D_SENSOR_SPI_DC   "SPI DC"
 #define D_SENSOR_BACKLIGHT "BLight"
@@ -684,7 +708,7 @@
 #define D_CMND_RFLOW "RfLow"
 #define D_CMND_RFSYNC "RfSync"
 
-// Commands xsns_03_hlw8012.ino
+// Commands xsns_03_energy.ino
 #define D_CMND_POWERLOW "PowerLow"
 #define D_CMND_POWERHIGH "PowerHigh"
 #define D_CMND_VOLTAGELOW "VoltageLow"
