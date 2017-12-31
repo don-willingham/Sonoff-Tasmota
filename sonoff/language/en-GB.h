@@ -343,7 +343,7 @@
 #define D_WEB_ADMIN_PASSWORD_NEW "New Web Admin Password"
 #define D_WEB_ADMIN_PASSWORD_RPT "Repeat Web Admin Password"
 #else
-#define D_WEB_ADMIN_PASSWORD "Repeat Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD "Web Admin Password"
 #endif
 #define D_MQTT_ENABLE "MQTT enable"
 #define D_FRIENDLY_NAME "Friendly Name"
