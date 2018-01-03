@@ -340,8 +340,10 @@
 #define D_OTHER_PARAMETERS "Sonstige Einstellungen"
 #ifdef WEB_PASSWORD_2X
 #define D_WEB_ADMIN_PASSWORD_CURR "Passwort für Web Oberfläche"
+#define D_WEB_ADMIN_PASSWORD_INC "Passwort für Web Oberfläche"
 #define D_WEB_ADMIN_PASSWORD_NEW "Passwort für Web Oberfläche"
 #define D_WEB_ADMIN_PASSWORD_RPT "Passwort für Web Oberfläche"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Passwort für Web Oberfläche"
 #else
 #define D_WEB_ADMIN_PASSWORD "Passwort für Web Oberfläche"
 #endif

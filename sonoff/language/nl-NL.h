@@ -340,8 +340,10 @@
 #define D_OTHER_PARAMETERS "Overige parameters"
 #ifdef WEB_PASSWORD_2X
 #define D_WEB_ADMIN_PASSWORD_CURR "Web Admin Wachtwoord"
+#define D_WEB_ADMIN_PASSWORD_INC "Web Admin Wachtwoord"
 #define D_WEB_ADMIN_PASSWORD_NEW "Web Admin Wachtwoord"
 #define D_WEB_ADMIN_PASSWORD_RPT "Web Admin Wachtwoord"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Web Admin Wachtwoord"
 #else
 #define D_WEB_ADMIN_PASSWORD "Web Admin Wachtwoord"
 #endif

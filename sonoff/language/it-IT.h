@@ -340,8 +340,10 @@
 #define D_OTHER_PARAMETERS "Altri parametri"
 #ifdef WEB_PASSWORD_2X
 #define D_WEB_ADMIN_PASSWORD_CURR "Password Amministratore Web"
+#define D_WEB_ADMIN_PASSWORD_INC "Password Amministratore Web"
 #define D_WEB_ADMIN_PASSWORD_NEW "Password Amministratore Web"
 #define D_WEB_ADMIN_PASSWORD_RPT "Password Amministratore Web"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Password Amministratore Web"
 #else
 #define D_WEB_ADMIN_PASSWORD "Password Amministratore Web"
 #endif

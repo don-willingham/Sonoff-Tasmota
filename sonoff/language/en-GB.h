@@ -340,8 +340,10 @@
 #define D_OTHER_PARAMETERS "Other parameters"
 #ifdef WEB_PASSWORD_2X
 #define D_WEB_ADMIN_PASSWORD_CURR "Current Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_INC "Incorrect Web Admin Password"
 #define D_WEB_ADMIN_PASSWORD_NEW "New Web Admin Password"
 #define D_WEB_ADMIN_PASSWORD_RPT "Repeat Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Web Admin Passwords do not match"
 #else
 #define D_WEB_ADMIN_PASSWORD "Web Admin Password"
 #endif

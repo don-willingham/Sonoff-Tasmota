@@ -340,8 +340,10 @@
 #define D_OTHER_PARAMETERS "Inne parametery"
 #ifdef WEB_PASSWORD_2X
 #define D_WEB_ADMIN_PASSWORD_CURR "Haslo administratora Web"
+#define D_WEB_ADMIN_PASSWORD_INC "Haslo administratora Web"
 #define D_WEB_ADMIN_PASSWORD_NEW "Haslo administratora Web"
 #define D_WEB_ADMIN_PASSWORD_RPT "Haslo administratora Web"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Haslo administratora Web"
 #else
 #define D_WEB_ADMIN_PASSWORD "Haslo administratora Web"
 #endif
