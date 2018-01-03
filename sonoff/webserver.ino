@@ -1027,17 +1027,17 @@ snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_LOG D_CMND_SERIALLOG " %d, " D
     if (strncmp(WebServer->arg("p1").c_str(), Settings.web_password, sizeof(Settings.web_password))) {
        snprintf_P(log_data, sizeof(log_data), PSTR("New password %s does not match old password %s"), WebServer->arg("p1").c_str(), Settings.web_password);
        AddLog(LOG_LEVEL_INFO);
-       HandleConfiguration();
+       HandleOtherConfiguration();
        return;
     } else if (strncmp(WebServer->arg("p2").c_str(), WebServer->arg("p3").c_str(), sizeof(Settings.web_password))) {
        snprintf_P(log_data, sizeof(log_data), PSTR("New passwords do not match: %s %s"), WebServer->arg("p2").c_str(), WebServer->arg("p3").c_str());
        AddLog(LOG_LEVEL_INFO);
-       HandleConfiguration();
+       HandleOtherConfiguration();
        return;
     } else if (strlen(WebServer->arg("p2").c_str()) >= sizeof(Settings.web_password)) {
        snprintf_P(log_data, sizeof(log_data), PSTR("New password %s is longer than max length of %d"), WebServer->arg("p2").c_str(), sizeof(Settings.web_password)-1);
        AddLog(LOG_LEVEL_INFO);
-       HandleConfiguration();
+       HandleOtherConfiguration();
        return;
     } else {
        strlcpy(Settings.web_password, (!strlen(WebServer->arg("p2").c_str())) ? WEB_PASSWORD : (!strcmp(WebServer->arg("p2").c_str(),"0")) ? "" : WebServer->arg("p2").c_str(), sizeof(Settings.web_password));
