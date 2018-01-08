@@ -222,7 +222,7 @@ const char HTTP_FORM_LOG1[] PROGMEM =
   "<fieldset><legend><b>&nbsp;" D_LOGGING_PARAMETERS "&nbsp;</b></legend><form method='get' action='sv'>"
   "<input id='w' name='w' value='3' hidden><input id='r' name='r' value='0' hidden>";
 const char HTTP_FORM_LOG2[] PROGMEM =
-  "<br/><b>{b0" D_LOG_LEVEL "</b> ({b1)<br/><select id='{b2' name='{b2'>"
+  "<br/><b>{b0</b> ({b1)<br/><select id='{b2' name='{b2'>"
   "<option{a0value='0'>0 " D_NONE "</option>"
   "<option{a1value='1'>1 " D_ERROR "</option>"
   "<option{a2value='2'>2 " D_INFO "</option>"
@@ -843,7 +843,7 @@ void HandleLoggingConfiguration()
     page += FPSTR(HTTP_FORM_LOG2);
     switch (idx) {
     case 0:
-      page.replace(F("{b0"), F(D_SERIAL " "));
+      page.replace(F("{b0"), F(D_SERIAL_LOG_LEVEL));
       page.replace(F("{b1"), STR(SERIAL_LOG_LEVEL));
       page.replace(F("{b2"), F("ls"));
       for (byte i = LOG_LEVEL_NONE; i < LOG_LEVEL_ALL; i++) {
@@ -851,7 +851,7 @@ void HandleLoggingConfiguration()
       }
       break;
     case 1:
-      page.replace(F("{b0"), F(D_WEB " "));
+      page.replace(F("{b0"), F(D_WEB_LOG_LEVEL));
       page.replace(F("{b1"), STR(WEB_LOG_LEVEL));
       page.replace(F("{b2"), F("lw"));
       for (byte i = LOG_LEVEL_NONE; i < LOG_LEVEL_ALL; i++) {
@@ -859,7 +859,7 @@ void HandleLoggingConfiguration()
       }
       break;
     case 2:
-      page.replace(F("{b0"), F(D_SYS));
+      page.replace(F("{b0"), F(D_SYS_LOG_LEVEL));
       page.replace(F("{b1"), STR(SYS_LOG_LEVEL));
       page.replace(F("{b2"), F("ll"));
       for (byte i = LOG_LEVEL_NONE; i < LOG_LEVEL_ALL; i++) {
@@ -1522,7 +1522,7 @@ void HandleInformation()
   func += F("<table width='100%'><tr><th>");
   func += F(D_PROGRAM_VERSION "}2" VERSION_STRING);
   func += F("}1" D_BUILD_DATE_AND_TIME "}2"); func += GetBuildDateAndTime();
-  func += F("}1" D_CORE_AND_SDK_VERSION "}2"); func += ESP.getCoreVersion(); func += F("/"); func += String(ESP.getSdkVersion());
+  func += F("}1" D_CORE_AND_SDK_VERSION "}2" ARDUINO_ESP8266_RELEASE "/"); func += String(ESP.getSdkVersion());
   func += F("}1" D_UPTIME "}2"); func += String(uptime); func += F(" Hours");
   snprintf_P(stopic, sizeof(stopic), PSTR(" at %X"), GetSettingsAddress());
   func += F("}1" D_FLASH_WRITE_COUNT "}2"); func += String(Settings.save_flag); func += stopic;

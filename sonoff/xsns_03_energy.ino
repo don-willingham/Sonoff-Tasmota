@@ -500,7 +500,7 @@ boolean EnergyMargin(byte type, uint16_t margin, uint16_t value, byte &flag, byt
   return (change != save_flag);
 }
 
-void EnergySetPowerSteadyCounter(byte value)
+void EnergySetPowerSteadyCounter()
 {
   energy_power_steady_cntr = 2;
 }
@@ -569,7 +569,7 @@ void EnergyMarginCheck()
       } else {
         energy_mplh_counter--;
         if (!energy_mplh_counter) {
-          snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_MAXPOWERREACHED "\":\"%d%s\"}"), energy_power_u, (Settings.flag.value_units) ? " " D_UNIT_WATT : "");
+          snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_MAXPOWERREACHED "\":\"%d%s\"}"), energy_power_u, (Settings.flag.value_units) ? " " D_UNIT_WATT : "");
           MqttPublishPrefixTopic_P(1, S_RSLT_WARNING);
           EnergyMqttShow();
           ExecuteCommandPower(1, 0);
@@ -592,11 +592,11 @@ void EnergyMarginCheck()
         if (energy_mplr_counter) {
           energy_mplr_counter--;
           if (energy_mplr_counter) {
-            snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_POWERMONITOR "\":\"%s\"}"), GetStateText(1));
-            MqttPublishPrefixTopic_P(5, PSTR(D_POWERMONITOR));
+            snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_POWERMONITOR "\":\"%s\"}"), GetStateText(1));
+            MqttPublishPrefixTopic_P(5, PSTR(D_JSON_POWERMONITOR));
             ExecuteCommandPower(1, 1);
           } else {
-            snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_MAXPOWERREACHEDRETRY "\":\"%s\"}"), GetStateText(0));
+            snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_MAXPOWERREACHEDRETRY "\":\"%s\"}"), GetStateText(0));
             MqttPublishPrefixTopic_P(1, S_RSLT_WARNING);
             EnergyMqttShow();
           }
@@ -610,14 +610,14 @@ void EnergyMarginCheck()
     energy_daily_u = (uint16_t)(energy_daily * 1000);
     if (!energy_max_energy_state && (RtcTime.hour == Settings.energy_max_energy_start)) {
       energy_max_energy_state = 1;
-      snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_ENERGYMONITOR "\":\"%s\"}"), GetStateText(1));
-      MqttPublishPrefixTopic_P(5, PSTR(D_ENERGYMONITOR));
+      snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_ENERGYMONITOR "\":\"%s\"}"), GetStateText(1));
+      MqttPublishPrefixTopic_P(5, PSTR(D_JSON_ENERGYMONITOR));
       ExecuteCommandPower(1, 1);
     }
     else if ((1 == energy_max_energy_state) && (energy_daily_u >= Settings.energy_max_energy)) {
       energy_max_energy_state = 2;
       dtostrfd(energy_daily, 3, mqtt_data);
-      snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_MAXENERGYREACHED "\":\"%s%s\"}"), mqtt_data, (Settings.flag.value_units) ? " " D_UNIT_KILOWATTHOUR : "");
+      snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_MAXENERGYREACHED "\":\"%s%s\"}"), mqtt_data, (Settings.flag.value_units) ? " " D_UNIT_KILOWATTHOUR : "");
       MqttPublishPrefixTopic_P(1, S_RSLT_WARNING);
       EnergyMqttShow();
       ExecuteCommandPower(1, 0);
@@ -629,7 +629,7 @@ void EnergyMarginCheck()
 void EnergyMqttShow()
 {
 // {"Time":"2017-12-16T11:48:55","ENERGY":{"Total":0.212,"Yesterday":0.000,"Today":0.014,"Period":2.0,"Power":22.0,"Factor":1.00,"Voltage":213.6,"Current":0.100}}
-  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_TIME "\":\"%s\""), GetDateAndTime().c_str());
+  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_TIME "\":\"%s\""), GetDateAndTime().c_str());
   EnergyShow(1);
   MqttPublishPrefixTopic_P(2, PSTR(D_RSLT_ENERGY), Settings.flag.mqtt_sensor_retain);
 }
@@ -638,7 +638,7 @@ void EnergyMqttShow()
  * Commands
 \*********************************************************************************************/
 
-boolean EnergyCommand(char *type, uint16_t index, char *dataBuf, uint16_t data_len, int16_t payload)
+boolean EnergyCommand()
 {
   char command [CMDSZ];
   char sunit[CMDSZ];
@@ -647,54 +647,54 @@ boolean EnergyCommand(char *type, uint16_t index, char *dataBuf, uint16_t data_l
   uint8_t unit = 0;
   unsigned long nvalue = 0;
 
-  int command_code = GetCommandCode(command, sizeof(command), type, kEnergyCommands);
+  int command_code = GetCommandCode(command, sizeof(command), XdrvMailbox.topic, kEnergyCommands);
   if (CMND_POWERLOW == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_min_power = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_min_power = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_min_power;
     unit = UNIT_WATT;
   }
   else if (CMND_POWERHIGH == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_max_power = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_max_power = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_power;
     unit = UNIT_WATT;
   }
   else if (CMND_VOLTAGELOW == command_code) {
-    if ((payload >= 0) && (payload < 501)) {
-      Settings.energy_min_voltage = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 501)) {
+      Settings.energy_min_voltage = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_min_voltage;
     unit = UNIT_VOLT;
   }
   else if (CMND_VOLTAGEHIGH == command_code) {
-    if ((payload >= 0) && (payload < 501)) {
-      Settings.energy_max_voltage = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 501)) {
+      Settings.energy_max_voltage = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_voltage;
     unit = UNIT_VOLT;
   }
   else if (CMND_CURRENTLOW == command_code) {
-    if ((payload >= 0) && (payload < 16001)) {
-      Settings.energy_min_current = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 16001)) {
+      Settings.energy_min_current = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_min_current;
     unit = UNIT_MILLIAMPERE;
   }
   else if (CMND_CURRENTHIGH == command_code) {
-    if ((payload >= 0) && (payload < 16001)) {
-      Settings.energy_max_current = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 16001)) {
+      Settings.energy_max_current = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_current;
     unit = UNIT_MILLIAMPERE;
   }
-  else if ((CMND_ENERGYRESET == command_code) && (index > 0) && (index <= 3)) {
+  else if ((CMND_ENERGYRESET == command_code) && (XdrvMailbox.index > 0) && (XdrvMailbox.index <= 3)) {
     char *p;
-    unsigned long lnum = strtoul(dataBuf, &p, 10);
-    if (p != dataBuf) {
-      switch (index) {
+    unsigned long lnum = strtoul(XdrvMailbox.data, &p, 10);
+    if (p != XdrvMailbox.data) {
+      switch (XdrvMailbox.index) {
       case 1:
         energy_kWhtoday = lnum *100000;
         RtcSettings.energy_kWhtoday = energy_kWhtoday;
@@ -720,45 +720,45 @@ boolean EnergyCommand(char *type, uint16_t index, char *dataBuf, uint16_t data_l
     status_flag = 1;
   }
   else if ((ENERGY_HLW8012 == energy_flg) && (CMND_HLWPCAL == command_code)) {
-    if ((payload > 0) && (payload < 32001)) {
-      Settings.hlw_power_calibration = (payload > 4000) ? payload : HLW_PREF_PULSE;  // 12530
+    if ((XdrvMailbox.payload > 0) && (XdrvMailbox.payload < 32001)) {
+      Settings.hlw_power_calibration = (XdrvMailbox.payload > 4000) ? XdrvMailbox.payload : HLW_PREF_PULSE;  // 12530
     }
     nvalue = Settings.hlw_power_calibration;
     unit = UNIT_MICROSECOND;
   }
   else if ((ENERGY_HLW8012 == energy_flg) && (CMND_HLWPSET == command_code)) {
-    if ((payload > 0) && (payload < 3601) && hlw_cf_pulse_length) {
-      Settings.hlw_power_calibration = (payload * 10 * hlw_cf_pulse_length) / HLW_PREF;
+    if ((XdrvMailbox.payload > 0) && (XdrvMailbox.payload < 3601) && hlw_cf_pulse_length) {
+      Settings.hlw_power_calibration = (XdrvMailbox.payload * 10 * hlw_cf_pulse_length) / HLW_PREF;
     }
     snprintf_P(command, sizeof(command), PSTR(D_CMND_HLWPCAL));
     nvalue = Settings.hlw_power_calibration;
     unit = UNIT_MICROSECOND;
   }
   else if ((ENERGY_HLW8012 == energy_flg) && (CMND_HLWUCAL == command_code)) {
-    if ((payload > 0) && (payload < 32001)) {
-      Settings.hlw_voltage_calibration = (payload > 999) ? payload : HLW_UREF_PULSE;  // 1950
+    if ((XdrvMailbox.payload > 0) && (XdrvMailbox.payload < 32001)) {
+      Settings.hlw_voltage_calibration = (XdrvMailbox.payload > 999) ? XdrvMailbox.payload : HLW_UREF_PULSE;  // 1950
     }
     nvalue = Settings.hlw_voltage_calibration;
     unit = UNIT_MICROSECOND;
   }
   else if ((ENERGY_HLW8012 == energy_flg) && (CMND_HLWUSET == command_code)) {
-    if ((payload > 0) && (payload < 501) && hlw_cf1_voltage_pulse_length) {
-      Settings.hlw_voltage_calibration = (payload * 10 * hlw_cf1_voltage_pulse_length) / HLW_UREF;
+    if ((XdrvMailbox.payload > 0) && (XdrvMailbox.payload < 501) && hlw_cf1_voltage_pulse_length) {
+      Settings.hlw_voltage_calibration = (XdrvMailbox.payload * 10 * hlw_cf1_voltage_pulse_length) / HLW_UREF;
     }
     snprintf_P(command, sizeof(command), PSTR(D_CMND_HLWUCAL));
     nvalue = Settings.hlw_voltage_calibration;
     unit = UNIT_MICROSECOND;
   }
   else if ((ENERGY_HLW8012 == energy_flg) && (CMND_HLWICAL == command_code)) {
-    if ((payload > 0) && (payload < 32001)) {
-      Settings.hlw_current_calibration = (payload > 1100) ? payload : HLW_IREF_PULSE;  // 3500
+    if ((XdrvMailbox.payload > 0) && (XdrvMailbox.payload < 32001)) {
+      Settings.hlw_current_calibration = (XdrvMailbox.payload > 1100) ? XdrvMailbox.payload : HLW_IREF_PULSE;  // 3500
     }
     nvalue = Settings.hlw_current_calibration;
     unit = UNIT_MICROSECOND;
   }
   else if ((ENERGY_HLW8012 == energy_flg) && (CMND_HLWISET == command_code)) {
-    if ((payload > 0) && (payload < 16001) && hlw_cf1_current_pulse_length) {
-      Settings.hlw_current_calibration = (payload * hlw_cf1_current_pulse_length) / HLW_IREF;
+    if ((XdrvMailbox.payload > 0) && (XdrvMailbox.payload < 16001) && hlw_cf1_current_pulse_length) {
+      Settings.hlw_current_calibration = (XdrvMailbox.payload * hlw_cf1_current_pulse_length) / HLW_IREF;
     }
     snprintf_P(command, sizeof(command), PSTR(D_CMND_HLWICAL));
     nvalue = Settings.hlw_current_calibration;
@@ -766,58 +766,58 @@ boolean EnergyCommand(char *type, uint16_t index, char *dataBuf, uint16_t data_l
   }
 #if FEATURE_POWER_LIMIT
   else if (CMND_MAXPOWER == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_max_power_limit = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_max_power_limit = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_power_limit;
     unit = UNIT_WATT;
   }
   else if (CMND_MAXPOWERHOLD == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_max_power_limit_hold = (1 == payload) ? MAX_POWER_HOLD : payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_max_power_limit_hold = (1 == XdrvMailbox.payload) ? MAX_POWER_HOLD : XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_power_limit_hold;
     unit = UNIT_SECOND;
   }
   else if (CMND_MAXPOWERWINDOW == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_max_power_limit_window = (1 == payload) ? MAX_POWER_WINDOW : payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_max_power_limit_window = (1 == XdrvMailbox.payload) ? MAX_POWER_WINDOW : XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_power_limit_window;
     unit = UNIT_SECOND;
   }
   else if (CMND_SAFEPOWER == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_max_power_safe_limit = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_max_power_safe_limit = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_power_safe_limit;
     unit = UNIT_WATT;
   }
   else if (CMND_SAFEPOWERHOLD == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_max_power_safe_limit_hold = (1 == payload) ? SAFE_POWER_HOLD : payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_max_power_safe_limit_hold = (1 == XdrvMailbox.payload) ? SAFE_POWER_HOLD : XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_power_safe_limit_hold;
     unit = UNIT_SECOND;
   }
   else if (CMND_SAFEPOWERWINDOW == command_code) {
-    if ((payload >= 0) && (payload < 1440)) {
-      Settings.energy_max_power_safe_limit_window = (1 == payload) ? SAFE_POWER_WINDOW : payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 1440)) {
+      Settings.energy_max_power_safe_limit_window = (1 == XdrvMailbox.payload) ? SAFE_POWER_WINDOW : XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_power_safe_limit_window;
     unit = UNIT_MINUTE;
   }
   else if (CMND_MAXENERGY == command_code) {
-    if ((payload >= 0) && (payload < 3601)) {
-      Settings.energy_max_energy = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 3601)) {
+      Settings.energy_max_energy = XdrvMailbox.payload;
       energy_max_energy_state = 3;
     }
     nvalue = Settings.energy_max_energy;
     unit = UNIT_WATTHOUR;
   }
   else if (CMND_MAXENERGYSTART == command_code) {
-    if ((payload >= 0) && (payload < 24)) {
-      Settings.energy_max_energy_start = payload;
+    if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload < 24)) {
+      Settings.energy_max_energy_start = XdrvMailbox.payload;
     }
     nvalue = Settings.energy_max_energy_start;
     unit = UNIT_HOUR;
@@ -924,6 +924,25 @@ void EnergyShow(boolean json)
 /*********************************************************************************************\
  * Interface
 \*********************************************************************************************/
+
+#define XDRV_03
+
+boolean Xdrv03(byte function)
+{
+  boolean result = false;
+
+  if (energy_flg) {
+    switch (function) {
+      case FUNC_COMMAND:
+        result = EnergyCommand();
+        break;
+      case FUNC_SET_POWER:
+        EnergySetPowerSteadyCounter();
+        break;
+    }
+  }
+  return result;
+}
 
 #define XSNS_03
 
