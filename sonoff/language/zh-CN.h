@@ -262,7 +262,15 @@
 #define D_TELEMETRY_PERIOD "上报周期"
 
 #define D_OTHER_PARAMETERS "其他设置"
+#ifdef WEB_PASSWORD_2X
+#define D_WEB_ADMIN_PASSWORD_CURR "Current Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_INC "Incorrect Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_NEW "New Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_RPT "Repeat Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Web Admin Passwords do not match"
+#else
 #define D_WEB_ADMIN_PASSWORD "WEB管理密码"
+#endif
 #define D_MQTT_ENABLE "启用MQTT"
 #define D_FRIENDLY_NAME "昵称"
 #define D_BELKIN_WEMO "贝尔金 WeMo"
