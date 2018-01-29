@@ -372,7 +372,7 @@
   #define D_DOMOTICZ_AIRQUALITY "AirQuality"
 #define D_DOMOTICZ_UPDATE_TIMER "Bijwerk timer"
 
-// xsns_03_energy.ino
+// xdrv_03_energy.ino
 #define D_ENERGY_TODAY "Verbruik vandaag"
 #define D_ENERGY_YESTERDAY "Verbruik gisteren"
 #define D_ENERGY_TOTAL "Verbruik totaal"
@@ -420,6 +420,7 @@
 #define D_SENSOR_SPI_CS   "SPI CS"
 #define D_SENSOR_SPI_DC   "SPI DC"
 #define D_SENSOR_BACKLIGHT "BkLight"
+#define D_SENSOR_PMS5003  "PMS5003"
 
 // Units
 #define D_UNIT_AMPERE "A"
