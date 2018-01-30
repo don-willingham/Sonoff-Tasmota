@@ -96,11 +96,11 @@ const char HTTP_HEAD[] PROGMEM =
 #ifdef BE_MINIMAL
   "<div style='text-align:center;color:red;'><h3>" D_MINIMAL_FIRMWARE_PLEASE_UPGRADE "</h3></div>"
 #endif
-#if MY_LANGUAGE == es-AR
- "<div style='text-align:center;'><h3>" D_MODULE " {ha</h3><h2>{h}</h2></div>";
-#else
+//#if (MY_LANGUAGE == es-AR)  // This does not function
+//  "<div style='text-align:center;'><h3>" D_MODULE " {ha</h3><h2>{h}</h2></div>";
+//#else
   "<div style='text-align:center;'><h3>{ha " D_MODULE "</h3><h2>{h}</h2></div>";
-#endif
+//#endif
 const char HTTP_SCRIPT_CONSOL[] PROGMEM =
   "var sn=0;"                    // Scroll position
   "var id=99;"                   // Get most of weblog initially
@@ -428,7 +428,7 @@ void SetHeader()
 #endif
 }
 
-void ShowPage(String &page, bool auth = true)
+void ShowPage(String &page, bool auth)
 {
 //  if((HTTP_ADMIN == webserver_state) && (Settings.web_password[0] != 0) && !WebServer->authenticate(WEB_USERNAME, Settings.web_password)) {
 //    return WebServer->requestAuthentication();
@@ -452,6 +452,11 @@ void ShowPage(String &page, bool auth = true)
   SetHeader();
   WebServer->send(200, FPSTR(HDR_CTYPE_HTML), page);
 //  WebServer->sendContent("");
+}
+
+void ShowPage(String &page)
+{
+  ShowPage(page, true);
 }
 
 //Authentication
