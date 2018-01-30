@@ -30,6 +30,8 @@
  *
 \*********************************************************************/
 
+//#define LANGUAGE_MODULE_NAME         // Enable to display "Module Generic" (ie Spanish), Disable to display "Generic Module" (ie English)
+
 // "2017-03-07T11:08:02" - ISO8601:2004
 #define D_YEAR_MONTH_SEPARATOR "-"
 #define D_MONTH_DAY_SEPARATOR "-"
@@ -382,9 +384,9 @@
 #define D_SHT1X_FOUND "SHT1X znaleziony"
 
 // xsns_18_pms5003.ino
-#define D_STANDARD_CONCENTRATION "Standard Concentration"
-#define D_ENVIRONMENTAL_CONCENTRATION "Environmental Concentration"
-#define D_PARTICALS_BEYOND "Particals beyond"
+#define D_STANDARD_CONCENTRATION "CF-1 PM"     // Standard Particle CF-1 Particle Matter
+#define D_ENVIRONMENTAL_CONCENTRATION "PM"     // Environmetal Particle Matter
+#define D_PARTICALS_BEYOND "Particals"
 
 // sonoff_template.h
 // Max string length is 8 characters including suffixes

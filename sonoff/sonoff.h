@@ -90,7 +90,11 @@ typedef unsigned long power_t;              // Power (Relay) type
 #ifdef USE_MQTT_TLS
   #define MAX_LOG_LINES        10           // Max number of lines in weblog
 #else
-  #define MAX_LOG_LINES        20           // Max number of lines in weblog
+//  #ifdef ARDUINO_ESP8266_RELEASE_2_3_0
+    #define MAX_LOG_LINES      20           // Max number of lines in weblog
+//  #else
+//    #define MAX_LOG_LINES      13           // Max number of lines in weblog (less due to more memory usage which prohibits full webpage load)
+//  #endif
 #endif
 #define MAX_BACKLOG            16           // Max number of commands in backlog (chk backlog_index and backlog_pointer code)
 #define MIN_BACKLOG_DELAY      2            // Minimal backlog delay in 0.1 seconds
@@ -127,6 +131,10 @@ enum LedStateOptions {LED_OFF, LED_POWER, LED_MQTTSUB, LED_POWER_MQTTSUB, LED_MQ
 enum EmulationOptions {EMUL_NONE, EMUL_WEMO, EMUL_HUE, EMUL_MAX};
 
 enum TopicOptions { CMND, STAT, TELE, nu1, RESULT_OR_CMND, RESULT_OR_STAT, RESULT_OR_TELE };
+
+enum ExecuteCommandPowerOptions { POWER_OFF, POWER_ON, POWER_TOGGLE, POWER_BLINK, POWER_BLINK_STOP, power_nu1, POWER_OFF_NO_STATE, POWER_ON_NO_STATE, power_nu2, POWER_SHOW_STATE };
+
+enum PowerOnStateOptions { POWER_ALL_OFF, POWER_ALL_ON, POWER_ALL_SAVED_TOGGLE, POWER_ALL_SAVED, POWER_ALL_ALWAYS_ON, POWER_ALL_OFF_PULSETIME_ON };
 
 enum ButtonStates {PRESSED, NOT_PRESSED};
 
