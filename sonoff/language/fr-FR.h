@@ -264,7 +264,15 @@
 #define D_TELEMETRY_PERIOD "Période télémetrie"
 
 #define D_OTHER_PARAMETERS "Autres paramètres"
+#ifdef WEB_PASSWORD_2X
+#define D_WEB_ADMIN_PASSWORD_CURR "Current Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_INC "Incorrect Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_NEW "New Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_RPT "Repeat Web Admin Password"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Web Admin Passwords do not match"
+#else
 #define D_WEB_ADMIN_PASSWORD "Mot de passe Web Admin"
+#endif
 #define D_MQTT_ENABLE "MQTT activé"
 #define D_FRIENDLY_NAME "Surnom"
 #define D_BELKIN_WEMO "Belkin WeMo"
