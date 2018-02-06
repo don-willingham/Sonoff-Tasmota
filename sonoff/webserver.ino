@@ -1113,7 +1113,9 @@ void HandleSaveSettings()
     char p3[33];
     WebGetArg("p2", p2, sizeof(p2));
     WebGetArg("p3", p3, sizeof(p3));
-    if (strncmp(tmp, Settings.web_password, sizeof(Settings.web_password))) {
+    if (!strlen(tmp) && !strlen(p2) && !strlen(p3)) {
+       // All password fields left blank do nothing
+    } else if (strncmp(tmp, Settings.web_password, sizeof(Settings.web_password))) {
        snprintf_P(log_data, sizeof(log_data), PSTR("New password %s does not match old password %s"), tmp, Settings.web_password); //Debug
        AddLog(LOG_LEVEL_INFO); //Debug
        HandleOtherConfigurationMessage(D_WEB_ADMIN_PASSWORD_INC);
