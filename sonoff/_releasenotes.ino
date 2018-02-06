@@ -1,4 +1,19 @@
-/* 5.11.1g
+/* 5.11.1i
+ * Update TasmotaSerial library to 1.1.0
+ * Rename commands HlwPCal, HlwUCal and HlwICal to PowerCal, VoltageCal and CurrentCal to be used for both Pow and S31 calibration
+ * Rename commands HlwPSet, HlwUSet and HlwISet to PowerSet, VoltageSet and CurrentSet to be used for both Pow and S31 calibration
+ * Fix some Energy Monitoring related issues
+ * Add command SetOption21 1 to allow Energy Monitoring when power is off on Sonoff Pow and Sonoff S31 (#1420)
+ * Add support for Sonoff S31 Smart Socket with Power Consumption Detection (#1626)
+ * Fix IRReceive Data value (#1663)
+ * Fix compiler warnings (#1774)
+ *
+ * 5.11.1h
+ * Rewrite webserver argument processing gaining 5k code space (#1705)
+ * Redesign weblog storage (#1730)
+ * Fix command SetOption20 (#1741)
+ *
+ * 5.11.1g
  * Add support for PMS5003 and PMS7003 particle concentration sensor
  * Reinstate console weblog to 20 lines after some webpage rewrite
  * Add command SetOption20 to allow update of Dimmer/Color/Ct without turning power on (#1719)
