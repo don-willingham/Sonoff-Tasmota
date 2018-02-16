@@ -519,20 +519,20 @@ void WifiConfig(uint8_t type)
       restart_flag = 2;
     }
     else if (WIFI_SMARTCONFIG == wifi_config_type) {
-      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_1_SMARTCONFIG D_ACTIVE_FOR_3_MINUTES));
+      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_1_SMARTCONFIG " " D_ACTIVE_FOR_3_MINUTES));
       WiFi.beginSmartConfig();
     }
     else if (WIFI_WPSCONFIG == wifi_config_type) {
       if (WifiWpsConfigBegin()) {
-        AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_3_WPSCONFIG D_ACTIVE_FOR_3_MINUTES));
+        AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_3_WPSCONFIG " " D_ACTIVE_FOR_3_MINUTES));
       } else {
-        AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_3_WPSCONFIG D_FAILED_TO_START));
+        AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_3_WPSCONFIG " " D_FAILED_TO_START));
         wifi_config_counter = 3;
       }
     }
 #ifdef USE_WEBSERVER
     else if (WIFI_MANAGER == wifi_config_type) {
-      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_2_WIFIMANAGER D_ACTIVE_FOR_3_MINUTES));
+      AddLog_P(LOG_LEVEL_INFO, S_LOG_WIFI, PSTR(D_WCFG_2_WIFIMANAGER " " D_ACTIVE_FOR_3_MINUTES));
       WifiManagerBegin();
     }
 #endif  // USE_WEBSERVER
@@ -993,6 +993,7 @@ uint32_t standard_time = 0;
 uint32_t ntp_time = 0;
 uint32_t midnight = 1451602800;
 uint8_t  midnight_now = 0;
+uint8_t  ntp_sync_minute = 0;
 
 String GetBuildDateAndTime()
 {
@@ -1047,6 +1048,22 @@ String GetUtcDateAndTime()
   return String(dt);
 }
 
+String GetUptime()
+{
+  char dt[16];
+
+  TIME_T ut;
+  BreakTime(uptime, ut);
+
+  // "P128DT14H35M44S" - ISO8601:2004 - https://en.wikipedia.org/wiki/ISO_8601 Durations
+//  snprintf_P(dt, sizeof(dt), PSTR("P%dDT%02dH%02dM%02dS"), ut.days, ut.hour, ut.minute, ut.second);
+
+  // "128 14:35:44" - OpenVMS
+  // "128T14:35:44" - Tasmota
+  snprintf_P(dt, sizeof(dt), PSTR("%d" D_DATE_TIME_SEPARATOR "%02d" D_HOUR_MINUTE_SEPARATOR "%02d" D_MINUTE_SECOND_SEPARATOR "%02d"), ut.days, ut.hour, ut.minute, ut.second);
+  return String(dt);
+}
+
 void BreakTime(uint32_t time_input, TIME_T &tm)
 {
 // break the given time_input into time components
@@ -1066,6 +1083,7 @@ void BreakTime(uint32_t time_input, TIME_T &tm)
   time /= 60;                // now it is hours
   tm.hour = time % 24;
   time /= 24;                // now it is days
+  tm.days = time;
   tm.day_of_week = ((time + 4) % 7) + 1;  // Sunday is day 1
 
   year = 0;
@@ -1138,34 +1156,34 @@ uint32_t MakeTime(TIME_T &tm)
 
 uint32_t RuleToTime(TimeChangeRule r, int yr)
 {
-    TIME_T tm;
-    uint32_t t;
-    uint8_t m;
-    uint8_t w;            // temp copies of r.month and r.week
+  TIME_T tm;
+  uint32_t t;
+  uint8_t m;
+  uint8_t w;                // temp copies of r.month and r.week
 
-    m = r.month;
-    w = r.week;
-    if (0 == w) {         // Last week = 0
-      if (++m > 12) {     // for "Last", go to the next month
-        m = 1;
-        yr++;
-      }
-      w = 1;              // and treat as first week of next month, subtract 7 days later
+  m = r.month;
+  w = r.week;
+  if (0 == w) {             // Last week = 0
+    if (++m > 12) {         // for "Last", go to the next month
+      m = 1;
+      yr++;
     }
+    w = 1;                  // and treat as first week of next month, subtract 7 days later
+  }
 
-    tm.hour = r.hour;
-    tm.minute = 0;
-    tm.second = 0;
-    tm.day_of_month = 1;
-    tm.month = m;
-    tm.year = yr - 1970;
-    t = MakeTime(tm);        // First day of the month, or first day of next month for "Last" rules
-    BreakTime(t, tm);
-    t += (7 * (w - 1) + (r.dow - tm.day_of_week + 7) % 7) * SECS_PER_DAY;
-    if (0 == r.week) {
-      t -= 7 * SECS_PER_DAY;    //back up a week if this is a "Last" rule
-    }
-    return t;
+  tm.hour = r.hour;
+  tm.minute = 0;
+  tm.second = 0;
+  tm.day_of_month = 1;
+  tm.month = m;
+  tm.year = yr - 1970;
+  t = MakeTime(tm);         // First day of the month, or first day of next month for "Last" rules
+  BreakTime(t, tm);
+  t += (7 * (w - 1) + (r.dow - tm.day_of_week + 7) % 7) * SECS_PER_DAY;
+  if (0 == r.week) {
+    t -= 7 * SECS_PER_DAY;  // back up a week if this is a "Last" rule
+  }
+  return t;
 }
 
 String GetTime(int type)
@@ -1193,43 +1211,32 @@ uint32_t Midnight()
 boolean MidnightNow()
 {
   boolean mnflg = midnight_now;
-  if (mnflg) {
-    midnight_now = 0;
-  }
+  if (mnflg) midnight_now = 0;
   return mnflg;
 }
 
 void RtcSecond()
 {
-  byte ntpsync;
   uint32_t stdoffset;
   uint32_t dstoffset;
   TIME_T tmpTime;
 
-  ntpsync = 0;
-  if (RtcTime.year < 2016) {
-    if (WL_CONNECTED == WiFi.status()) {
-      ntpsync = 1;  // Initial NTP sync
-    }
-  } else {
-    if ((1 == RtcTime.minute) && (1 == RtcTime.second)) {
-      ntpsync = 1;  // Hourly NTP sync at xx:01:01
-    }
-  }
-  if (ntpsync) {
+  if ((ntp_sync_minute > 59) && (3 == RtcTime.minute)) ntp_sync_minute = 1;                // If sync prepare for a new cycle
+  uint8_t offset = (uptime < 30) ? RtcTime.second : (((ESP.getChipId() & 0xF) * 3) + 3) ;  // First try ASAP to sync. If fails try once every 60 seconds based on chip id
+  if ((WL_CONNECTED == WiFi.status()) && (offset == RtcTime.second) && ((RtcTime.year < 2016) || (ntp_sync_minute == RtcTime.minute))) {
     ntp_time = sntp_get_current_timestamp();
     if (ntp_time) {
       utc_time = ntp_time;
+      ntp_sync_minute = 60;  // Sync so block further requests
       BreakTime(utc_time, tmpTime);
       RtcTime.year = tmpTime.year + 1970;
       daylight_saving_time = RuleToTime(DaylightSavingTime, RtcTime.year);
       standard_time = RuleToTime(StandardTime, RtcTime.year);
-      snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_APPLICATION "(" D_UTC_TIME ") %s"), GetTime(0).c_str());
+      snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_APPLICATION "(" D_UTC_TIME ") %s, (" D_DST_TIME ") %s, (" D_STD_TIME ") %s"),
+        GetTime(0).c_str(), GetTime(2).c_str(), GetTime(3).c_str());
       AddLog(LOG_LEVEL_DEBUG);
-      snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_APPLICATION "(" D_DST_TIME ") %s"), GetTime(2).c_str());
-      AddLog(LOG_LEVEL_DEBUG);
-      snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_APPLICATION "(" D_STD_TIME ") %s"), GetTime(3).c_str());
-      AddLog(LOG_LEVEL_DEBUG);
+    } else {
+      ntp_sync_minute++;  // Try again in next minute
     }
   }
   utc_time++;
@@ -1405,6 +1412,7 @@ void AddLog(byte loglevel)
       memmove(web_log, it, WEB_LOG_SIZE -(it-web_log));  // Move buffer forward to remove oldest log line
     }
     snprintf_P(web_log, sizeof(web_log), PSTR("%s%c%s%s\1"), web_log, web_log_index++, mxtime, log_data);
+    if (!web_log_index) web_log_index++;   // Index 0 is not allowed as it is the end of char string
   }
 #endif  // USE_WEBSERVER
   if ((WL_CONNECTED == WiFi.status()) && (loglevel <= syslog_level)) {
@@ -1428,13 +1436,18 @@ void AddLog_P(byte loglevel, const char *formatP, const char *formatP2)
   AddLog(loglevel);
 }
 
-void AddLogSerial(byte loglevel)
+void AddLogSerial(byte loglevel, uint8_t *buffer, byte count)
 {
   snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_SERIAL D_RECEIVED));
-  for (byte i = 0; i < serial_in_byte_counter; i++) {
-    snprintf_P(log_data, sizeof(log_data), PSTR("%s %02X"), log_data, serial_in_buffer[i]);
+  for (byte i = 0; i < count; i++) {
+    snprintf_P(log_data, sizeof(log_data), PSTR("%s %02X"), log_data, *(buffer++));
   }
   AddLog(loglevel);
+}
+
+void AddLogSerial(byte loglevel)
+{
+  AddLogSerial(loglevel, (uint8_t*)serial_in_buffer, serial_in_byte_counter);
 }
 
 /*********************************************************************************************\

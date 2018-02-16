@@ -85,7 +85,7 @@ const char HTTP_HEAD_STYLE[] PROGMEM =
   "textarea{resize:none;width:98%;height:318px;padding:5px;overflow:auto;}"
   "body{text-align:center;font-family:verdana;}"
   "td{padding:0px;}"
-  "button{border:0;border-radius:0.3rem;background-color:#1fa3ec;color:#fff;line-height:2.4rem;font-size:1.2rem;width:100%;-webkit-transition-duration:0.4s;transition-duration:0.4s;}"
+  "button{border:0;border-radius:0.3rem;background-color:#1fa3ec;color:#fff;line-height:2.4rem;font-size:1.2rem;width:100%;-webkit-transition-duration:0.4s;transition-duration:0.4s;cursor:pointer;}"
   "button:hover{background-color:#006cba;}"
   "a{text-decoration:none;}"
   ".p{float:left;text-align:left;}"
@@ -871,8 +871,7 @@ void HandleMqttConfiguration()
   page += FPSTR(HTTP_HEAD_STYLE);
   page += FPSTR(HTTP_FORM_MQTT);
   char str[sizeof(Settings.mqtt_client)];
-  GetMqttClient(str, MQTT_CLIENT_ID, sizeof(Settings.mqtt_client));
-  page.replace(F("{m0"), str);
+  page.replace(F("{m0"), GetMqttClient(str, MQTT_CLIENT_ID, sizeof(Settings.mqtt_client)));
   page.replace(F("{m1"), Settings.mqtt_host);
   page.replace(F("{m2"), String(Settings.mqtt_port));
   page.replace(F("{m3"), Settings.mqtt_client);
@@ -957,7 +956,7 @@ void HandleOtherConfigurationMessage(String message)
   }
   page += FPSTR(HTTP_FORM_OTHER);
   page.replace(F("{r1"), (Settings.flag.mqtt_enabled) ? F(" checked") : F(""));
-  uint8_t maxfn = (devices_present > MAX_FRIENDLYNAMES) ? MAX_FRIENDLYNAMES : devices_present;
+  uint8_t maxfn = (devices_present > MAX_FRIENDLYNAMES) ? MAX_FRIENDLYNAMES : (!devices_present) ? 1 : devices_present;
   for (byte i = 0; i < maxfn; i++) {
     page += FPSTR(HTTP_FORM_OTHER2);
     page.replace(F("{1"), String(i +1));
@@ -1372,6 +1371,9 @@ void HandleUploadLoop()
 #ifdef USE_EMULATION
       UdpDisconnect();
 #endif  // USE_EMULATION
+#ifdef USE_ARILUX_RF
+      AriluxRfDisable();  // Prevent restart exception on Arilux Interrupt routine
+#endif  // USE_ARILUX_RF
       if (Settings.flag.mqtt_enabled) {
         MqttClient.disconnect();
       }
@@ -1482,11 +1484,8 @@ void HandleHttpCommand()
   String message = F("{\"" D_RSLT_WARNING "\":\"");
   if (valid) {
     byte curridx = web_log_index;
-    char tmp[100];
-    WebGetArg("cmnd", tmp, sizeof(tmp));
-    if (strlen(tmp)) {
-//      snprintf_P(svalue, sizeof(svalue), tmp);  // Processes FullTopic %p
-      strlcpy(svalue, tmp, sizeof(svalue));       // Fixed 5.8.0b
+    WebGetArg("cmnd", svalue, sizeof(svalue));
+    if (strlen(svalue)) {
 //      byte syslog_now = syslog_level;
 //      syslog_level = 0;  // Disable UDP syslog to not trigger hardware WDT - Seems to work fine since 5.7.1d (global logging)
       ExecuteCommand(svalue);
@@ -1553,11 +1552,8 @@ void HandleAjaxConsoleRefresh()
   byte cflg = 1;
   byte counter = 0;                // Initial start, should never be 0 again
 
-  char tmp[100];
-  WebGetArg("c1", tmp, sizeof(tmp));
-  if (strlen(tmp)) {
-//    snprintf_P(svalue, sizeof(svalue), tmp);  // Processes FullTopic %p
-    strlcpy(svalue, tmp, sizeof(svalue));       // Fixed 5.8.0b
+  WebGetArg("c1", svalue, sizeof(svalue));
+  if (strlen(svalue)) {
     snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_COMMAND "%s"), svalue);
     AddLog(LOG_LEVEL_INFO);
 //    byte syslog_now = syslog_level;
@@ -1566,9 +1562,9 @@ void HandleAjaxConsoleRefresh()
 //    syslog_level = syslog_now;
   }
 
-  WebGetArg("c2", tmp, sizeof(tmp));
-  if (strlen(tmp)) {
-    counter = atoi(tmp);
+  WebGetArg("c2", svalue, sizeof(svalue));
+  if (strlen(svalue)) {
+    counter = atoi(svalue);
   }
 
   byte last_reset_web_log_flag = reset_web_log_flag;
@@ -1637,7 +1633,7 @@ void HandleInformation()
   func += F(D_PROGRAM_VERSION "}2"); func += my_version;
   func += F("}1" D_BUILD_DATE_AND_TIME "}2"); func += GetBuildDateAndTime();
   func += F("}1" D_CORE_AND_SDK_VERSION "}2" ARDUINO_ESP8266_RELEASE "/"); func += String(ESP.getSdkVersion());
-  func += F("}1" D_UPTIME "}2"); func += String(uptime); func += F(" Hours");
+  func += F("}1" D_UPTIME "}2"); func += GetUptime();
   snprintf_P(stopic, sizeof(stopic), PSTR(" at %X"), GetSettingsAddress());
   func += F("}1" D_FLASH_WRITE_COUNT "}2"); func += String(Settings.save_flag); func += stopic;
   func += F("}1" D_BOOT_COUNT "}2"); func += String(Settings.bootcount);
@@ -1672,7 +1668,7 @@ void HandleInformation()
     func += F("}1" D_MQTT_USER "}2"); func += Settings.mqtt_user;
     func += F("}1" D_MQTT_TOPIC "}2"); func += Settings.mqtt_topic;
     func += F("}1" D_MQTT_GROUP_TOPIC "}2"); func += Settings.mqtt_grptopic;
-    GetTopic_P(stopic, CMND, Settings.mqtt_topic, "");
+    GetTopic_P(stopic, CMND, mqtt_topic, "");
     func += F("}1" D_MQTT_FULL_TOPIC "}2"); func += stopic;
 
   } else {
