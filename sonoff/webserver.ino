@@ -353,6 +353,7 @@ void StartWebserver(int type, IPAddress ipweb)
       WebServer->on("/up", HandleUpgradeFirmware);
       WebServer->on("/u1", HandleUpgradeFirmwareStart);  // OTA
       WebServer->on("/u2", HTTP_POST, HandleUploadDone, HandleUploadLoop);
+      WebServer->on("/u2", HTTP_OPTIONS, HandlePreflightRequest);
       WebServer->on("/cm", HandleHttpCommand);
       WebServer->on("/cs", HandleConsole);
       WebServer->on("/ax", HandleAjaxConsoleRefresh);
@@ -1461,6 +1462,14 @@ void HandleUploadLoop()
   delay(0);
 }
 
+void HandlePreflightRequest()
+{
+  WebServer->sendHeader(F("Access-Control-Allow-Origin"), F("*"));
+  WebServer->sendHeader(F("Access-Control-Allow-Methods"), F("GET, POST"));
+  WebServer->sendHeader(F("Access-Control-Allow-Headers"), F("authorization"));
+  WebServer->send(200, FPSTR(HDR_CTYPE_HTML), "");
+}
+
 void HandleHttpCommand()
 {
   if (HttpUser()) {
@@ -1633,7 +1642,7 @@ void HandleInformation()
   func += F(D_PROGRAM_VERSION "}2"); func += my_version;
   func += F("}1" D_BUILD_DATE_AND_TIME "}2"); func += GetBuildDateAndTime();
   func += F("}1" D_CORE_AND_SDK_VERSION "}2" ARDUINO_ESP8266_RELEASE "/"); func += String(ESP.getSdkVersion());
-  func += F("}1" D_UPTIME "}2"); func += GetUptime();
+  func += F("}1" D_UPTIME "}2"); func += GetDateAndTime(DT_UPTIME);
   snprintf_P(stopic, sizeof(stopic), PSTR(" at %X"), GetSettingsAddress());
   func += F("}1" D_FLASH_WRITE_COUNT "}2"); func += String(Settings.save_flag); func += stopic;
   func += F("}1" D_BOOT_COUNT "}2"); func += String(Settings.bootcount);
