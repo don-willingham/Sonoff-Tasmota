@@ -1,4 +1,36 @@
-/* 5.12.0b
+/* 5.12.0e
+ * Add Domoticz dust (custom) sensors to PMS5003 and NovaFitness SDS drivers as PM1, PM2.5 and PM10
+ * Add a second TLS fingerprint to allow switching keys in TLS mode (#2033, #2102)
+ * Add display of remaining pulse time to command PulseTime (#2085)
+ * Add additional time offset to Wifi Retry based on device mac address (#2089)
+ * Add command Color6 RRGGBB for Clock hour marker color and command Rotation pixels for Clock rotation (#2092)
+ * Add HTML language header in local language (#2123)
+ * Add command PowerDelta 0..100 (percentage) to Energy monitoring devices to report on active power load change (#2157)
+ * Add Restart Reason to Status 1 report (#2161)
+ * Fix MAX31850 higher temperatures (#1269)
+ *
+ * 5.12.0d
+ * Add support for optional MQTT drivers to be selected in user_config.h (#1992)
+ * Add Portuguese language file
+ * Add compiler check for stable lwIP version v1.4 (#1940)
+ * Add always suffix with device number in Mqtt discovery topic (#1962)
+ * Add diacritics to Polish language file (#2005)
+ * Add Hungarian language file (#2024)
+ * Add Czech language file
+ * Add Chinese (Traditional) in Taiwan language file (#2108)
+ * Add support for Nova Fitness SDS011 and possibly SDS021 particle concentration sensor (#2070)
+ * Add single decimal precision to Nova Fitness SDS0x1 sensor values (#2093)
+ * Add support for multiple SHT3X sensors (#1949, #2110)
+ * Add Sonoff SC domoticz support for Sound level as Counter and Air quality (#2118)
+ * Fix MQTT TLS fingerprint validation (#2033)
+ *
+ * 5.12.0c
+ * Fix intermittent exception when dns lookup is used while sleep is enabled
+ * Fix 5.4.0 regression turning off single press after button hold during 4x hold time
+ * Fix possible wifi connection problem by erasing sdk configuration parameters
+ * Change Polish language to using Diacritics (#2005)
+ *
+ * 5.12.0b
  * Add serial debug info
  * Add Multichannel Gas sensor using MultiChannel_Gas_Sensor library (#1245)
  * Add optional usage of %d or %X suffices in MQTT client to append chipid (#1871)
@@ -10,6 +42,7 @@
  * Add Webserver upload preflight request support (#1927)
  * Add Home Assistant clear other device (#1931)
  * Add Restart time to Status 1 (#1938)
+ * Change TSL2561 driver to joba library and delete Adafruit library (#1644)
  * Change Sonoff SC JSON format (#1939)
  * Fix compile error when define HOME_ASSISTANT_DISCOVERY_ENABLE is not set (#1937)
  * Add optional TSL2561 driver using library Joba_Tsl2561 to be enabled in user_config.h with define USE_TSL2561_JOBA (#1951)
@@ -18,7 +51,7 @@
  * 5.12.0a
  * Change platformio option sonoff-ds18x20 to sonoff-xxl enabling ds18x20 and all other sensors in one image
  * Fix providing web page configuratin option for Friendly Name when no device (relay or light) is configured (#1850)
- * Change default paremeters in user_config.h to undefined for easy installation (#1851)
+ * Change default parameters in user_config.h to undefined for easy installation (#1851)
  * Change max user configurable hold time from 10 to 25 seconds (#1851)
  *
  * 5.12.0 20180209

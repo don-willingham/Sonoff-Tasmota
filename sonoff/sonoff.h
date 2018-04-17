@@ -71,11 +71,12 @@ typedef unsigned long power_t;              // Power (Relay) type
 //#define PWM_FREQ               910          // 100..1000 Hz led refresh (iTead value)
 #define PWM_FREQ               880          // 100..1000 Hz led refresh (BN-SZ01 value)
 
-#define MAX_POWER_HOLD         10           // Time in SECONDS to allow max agreed power (Pow)
-#define MAX_POWER_WINDOW       30           // Time in SECONDS to disable allow max agreed power (Pow)
-#define SAFE_POWER_HOLD        10           // Time in SECONDS to allow max unit safe power (Pow)
-#define SAFE_POWER_WINDOW      30           // Time in MINUTES to disable allow max unit safe power (Pow)
-#define MAX_POWER_RETRY        5            // Retry count allowing agreed power limit overflow (Pow)
+#define DEFAULT_POWER_DELTA    80           // Power change percentage
+#define MAX_POWER_HOLD         10           // Time in SECONDS to allow max agreed power
+#define MAX_POWER_WINDOW       30           // Time in SECONDS to disable allow max agreed power
+#define SAFE_POWER_HOLD        10           // Time in SECONDS to allow max unit safe power
+#define SAFE_POWER_WINDOW      30           // Time in MINUTES to disable allow max unit safe power
+#define MAX_POWER_RETRY        5            // Retry count allowing agreed power limit overflow
 
 #define STATES                 20           // State loops per second
 #define SYSLOG_TIMER           600          // Seconds to restore syslog_level
@@ -138,13 +139,13 @@ enum SettingsParmaIndex {P_HOLD_TIME, P_MAX_POWER_RETRY, P_MAX_PARAM8};
 
 enum DomoticzSensors {DZ_TEMP, DZ_TEMP_HUM, DZ_TEMP_HUM_BARO, DZ_POWER_ENERGY, DZ_ILLUMINANCE, DZ_COUNT, DZ_VOLTAGE, DZ_CURRENT, DZ_AIRQUALITY, DZ_MAX_SENSORS};
 
-enum Ws2812ClockIndex {WS_SECOND, WS_MINUTE, WS_HOUR};
-enum Ws2812Color {WS_RED, WS_GREEN, WS_BLUE};
+enum Ws2812ClockIndex { WS_SECOND, WS_MINUTE, WS_HOUR, WS_MARKER };
+enum Ws2812Color { WS_RED, WS_GREEN, WS_BLUE };
 enum LightTypes {LT_BASIC, LT_PWM1, LT_PWM2, LT_PWM3, LT_PWM4, LT_PWM5, LT_PWM6, LT_PWM7, LT_NU8, LT_NU9, LT_NU10, LT_WS2812, LT_RGBW, LT_RGBWC};
 enum LichtSubtypes {LST_NONE, LST_SINGLE, LST_COLDWARM, LST_RGB, LST_RGBW, LST_RGBWC};
 enum LichtSchemes {LS_POWER, LS_WAKEUP, LS_CYCLEUP, LS_CYCLEDN, LS_RANDOM, LS_MAX};
 
-enum XsnsFunctions {FUNC_INIT, FUNC_EVERY_50_MSECOND, FUNC_EVERY_SECOND, FUNC_PREP_BEFORE_TELEPERIOD, FUNC_JSON_APPEND, FUNC_WEB_APPEND, FUNC_SAVE_BEFORE_RESTART,
+enum XsnsFunctions {FUNC_INIT, FUNC_LOOP, FUNC_EVERY_50_MSECOND, FUNC_EVERY_SECOND, FUNC_PREP_BEFORE_TELEPERIOD, FUNC_JSON_APPEND, FUNC_WEB_APPEND, FUNC_SAVE_BEFORE_RESTART,
                     FUNC_COMMAND, FUNC_MQTT_SUBSCRIBE, FUNC_MQTT_INIT, FUNC_MQTT_DATA, FUNC_SET_POWER, FUNC_SHOW_SENSOR};
 
 const uint8_t kDefaultRfCode[9] PROGMEM = { 0x21, 0x16, 0x01, 0x0E, 0x03, 0x48, 0x2E, 0x1A, 0x00 };

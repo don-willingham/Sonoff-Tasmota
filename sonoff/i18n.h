@@ -250,6 +250,7 @@
 #define D_CMND_LEDTABLE "LedTable"
 #define D_CMND_FADE "Fade"
 #define D_CMND_PIXELS "Pixels"
+#define D_CMND_ROTATION "Rotation"
 #define D_CMND_SCHEME "Scheme"
 #define D_CMND_SPEED "Speed"
 #define D_CMND_WAKEUP "Wakeup"
@@ -274,6 +275,7 @@
 // Commands xdrv_03_energy.ino
 #define D_CMND_POWERLOW "PowerLow"
 #define D_CMND_POWERHIGH "PowerHigh"
+#define D_CMND_POWERDELTA "PowerDelta"
 #define D_CMND_VOLTAGELOW "VoltageLow"
 #define D_CMND_VOLTAGEHIGH "VoltageHigh"
 #define D_CMND_CURRENTLOW "CurrentLow"
@@ -358,6 +360,7 @@ enum UnitNames {
   UNIT_MILLISECOND,
   UNIT_MINUTE,
   UNIT_PPM,
+  UNIT_PERCENTAGE,
   UNIT_PRESSURE,
   UNIT_SECOND,
   UNIT_SECTORS,
@@ -375,6 +378,7 @@ const char kUnitNames[] PROGMEM =
   D_UNIT_MILLISECOND "|"
   D_UNIT_MINUTE "|"
   D_UNIT_PARTS_PER_MILLION "|"
+  "%|"
   D_UNIT_PRESSURE "|"
   D_UNIT_SECOND "|"
   D_UNIT_SECTORS "|"
@@ -400,6 +404,7 @@ const char S_JSON_COMMAND_INDEX_NVALUE[] PROGMEM =            "{\"%s%d\":%d}";
 const char S_JSON_COMMAND_INDEX_LVALUE[] PROGMEM =            "{\"%s%d\":%lu}";
 const char S_JSON_COMMAND_INDEX_SVALUE[] PROGMEM =            "{\"%s%d\":\"%s\"}";
 const char S_JSON_COMMAND_INDEX_SVALUE_SVALUE[] PROGMEM =     "{\"%s%d\":\"%s%s\"}";
+const char S_JSON_COMMAND_INDEX_NVALUE_ACTIVE_NVALUE[] PROGMEM = "{\"%s%d\":\"%d (" D_JSON_ACTIVE " %d)\"}";
 
 const char S_JSON_SENSOR_INDEX_NVALUE[] PROGMEM =            "{\"" D_CMND_SENSOR "%d\":%d}";
 const char S_JSON_SENSOR_INDEX_SVALUE[] PROGMEM =            "{\"" D_CMND_SENSOR "%d\":\"%s\"}";

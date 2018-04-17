@@ -29,15 +29,19 @@
 \*********************************************************************************************/
 
 // -- Localization --------------------------------
+//#define MY_LANGUAGE            cs-CZ           // Czech in Czech
 //#define MY_LANGUAGE            de-DE           // German in Germany
 //#define MY_LANGUAGE            en-GB           // English in Great Britain. Enabled by Default
 //#define MY_LANGUAGE            es-AR           // Spanish in Argentina
 //#define MY_LANGUAGE            fr-FR           // French in France
+//#define MY_LANGUAGE            hu-HU           // Hungarian in Hungary
 //#define MY_LANGUAGE            it-IT           // Italian in Italy
 //#define MY_LANGUAGE            nl-NL           // Dutch in the Netherlands
 //#define MY_LANGUAGE            pl-PL           // Polish in Poland
+//#define MY_LANGUAGE            pt-PT           // Portuguese in Portugal
 //#define MY_LANGUAGE            ru-RU           // Russian in Russia
 //#define MY_LANGUAGE            zh-CN           // Chinese (Simplified) in China
+//#define MY_LANGUAGE            zh-TW           // Chinese (Traditional) in Taiwan
 
 // -- Project -------------------------------------
 #define PROJECT                "sonoff"          // PROJECT is used as the default topic delimiter and OTA file name
@@ -70,15 +74,26 @@
 // -- Ota -----------------------------------------
 #define OTA_URL                "http://sonoff.maddox.co.uk/tasmota/sonoff.ino.bin"  // [OtaUrl]
 
+/*********************************************************************************************\
+ * Select ONE of possible MQTT library types below
+\*********************************************************************************************/
+// Default MQTT driver for both non-TLS and TLS connections. Blocks network if MQTT server is unavailable.
+#define MQTT_LIBRARY_TYPE      1                 // Use PubSubClient library
+// Alternative MQTT driver does not block network when MQTT server is unavailable. No TLS support
+//#define MQTT_LIBRARY_TYPE      2                 // Use TasmotaMqtt library (+4k4 code, +4k mem) - non-TLS only
+// Alternative MQTT driver does not block network when MQTT server is unavailable. No TLS support
+//#define MQTT_LIBRARY_TYPE      3                 // Use (patched) esp-mqtt-arduino library (+4k8 code, +4k mem) - non-TLS only
+
 // -- MQTT ----------------------------------------
 #define MQTT_USE               1                 // [SetOption3] Select default MQTT use (0 = Off, 1 = On)
+
 // !!! TLS uses a LOT OF MEMORY (20k) so be careful to enable other options at the same time !!!
-//#define USE_MQTT_TLS                             // EXPERIMENTAL Use TLS for MQTT connection (+53k code, +20k mem) - Disable by //
+//#define USE_MQTT_TLS                             // Use TLS for MQTT connection (+53k code, +15k mem) - Disable by //
                                                  //   Needs Fingerprint, TLS Port, UserId and Password
 #ifdef USE_MQTT_TLS
-//  #define MQTT_HOST            "m20.cloudmqtt.com"  // [MqttHost]
   #define MQTT_HOST            ""                   // [MqttHost]
-  #define MQTT_FINGERPRINT     "A5 02 FF 13 99 9F 8B 39 8E F1 83 4F 11 23 65 0B 32 36 FC 07"  // [MqttFingerprint]
+  #define MQTT_FINGERPRINT1    "A5 02 FF 13 99 9F 8B 39 8E F1 83 4F 11 23 65 0B 32 36 FC 07"  // [MqttFingerprint1]
+  #define MQTT_FINGERPRINT2    "A5 02 FF 13 99 9F 8B 39 8E F1 83 4F 11 23 65 0B 32 36 FC 07"  // [MqttFingerprint2]
   #define MQTT_PORT            20123                // [MqttPort] MQTT TLS port
   #define MQTT_USER            "cloudmqttuser"      // [MqttUser] Mandatory user
   #define MQTT_PASS            "cloudmqttpassword"  // [MqttPassword] Mandatory password
@@ -190,8 +205,7 @@
 //    #define USE_BME680                           // Add additional support for BME680 sensor using Adafruit Sensor and BME680 libraries (+6k code)
   #define USE_BH1750                             // Add I2C code for BH1750 sensor (+0k5 code)
 //  #define USE_VEML6070                           // Add I2C code for VEML6070 sensor (+0k5 code)
-//  #define USE_TSL2561                            // Add I2C code for TSL2561 sensor using library Adafruit TSL2561 Arduino (+1k4 code)
-//  #define USE_TSL2561_JOBA                       // Add I2C code for TSL2561 sensor using library Joba_Tsl2561 (+2k3 code)
+//  #define USE_TSL2561                            // Add I2C code for TSL2561 sensor using library Joba_Tsl2561 (+2k3 code)
 //  #define USE_ADS1115                            // Add I2C code for ADS1115 16 bit A/D converter based on Adafruit ADS1x15 library (no library needed) (+0k7 code)
 //  #define USE_ADS1115_I2CDEV                     // Add I2C code for ADS1115 16 bit A/D converter using library i2cdevlib-Core and i2cdevlib-ADS1115 (+2k code)
 //  #define USE_INA219                             // Add I2C code for INA219 Low voltage and current sensor (+1k code)
@@ -205,6 +219,7 @@
   #define CO2_LOW              800               // Below this CO2 value show green light (needs PWM or WS2812 RG(B) led and enable with SetOption18 1)
   #define CO2_HIGH             1200              // Above this CO2 value show red light (needs PWM or WS2812 RG(B) led and enable with SetOption18 1)
 #define USE_PMS5003                              // Add support for PMS5003 and PMS7003 particle concentration sensor (+1k3 code)
+#define USE_NOVA_SDS                             // Add support for SDS011 and SDS021 particle concentration sensor (+0k7 code)
 #define USE_PZEM004T                             // Add support for PZEM004T Energy monitor (+2k code)
 
 // -- Low level interface devices -----------------

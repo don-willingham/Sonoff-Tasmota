@@ -49,8 +49,9 @@ void WifiWpsStatusCallback(wps_cb_status status);
 #define USE_VEML6070                          // Add I2C code for VEML6070 sensor (+0k5 code)
 #define USE_TSL2561                           // Add I2C code for TSL2561 sensor using library Adafruit TSL2561 Arduino (+1k2 code)
 #define USE_ADS1115                           // Add I2C code for ADS1115 16 bit A/D converter based on Adafruit ADS1x15 library (no library needed) (+0k7 code)
-//  #define USE_ADS1115_I2CDEV                  // Add I2C code for ADS1115 16 bit A/D converter using library i2cdevlib-Core and i2cdevlib-ADS1115 (+2k code)
+//#define USE_ADS1115_I2CDEV                    // Add I2C code for ADS1115 16 bit A/D converter using library i2cdevlib-Core and i2cdevlib-ADS1115 (+2k code)
 #define USE_INA219                            // Add I2C code for INA219 Low voltage and current sensor (+1k code)
+#define USE_MGS                               // Add I2C code for Xadow and Grove Mutichannel Gas sensor using library Multichannel_Gas_Sensor (+10k code)
 #define USE_MHZ19                             // Add support for MH-Z19 CO2 sensor (+2k code)
 #define USE_SENSEAIR                          // Add support for SenseAir K30, K70 and S8 CO2 sensor (+2k3 code)
 #ifndef CO2_LOW
@@ -60,6 +61,7 @@ void WifiWpsStatusCallback(wps_cb_status status);
   #define CO2_HIGH             1200           // Above this CO2 value show red light (needs PWM or WS2812 RG(B) led and enable with SetOption18 1)
 #endif
 #define USE_PMS5003                           // Add support for PMS5003 and PMS7003 particle concentration sensor (+1k3 code)
+#define USE_NOVA_SDS                          // Add support for SDS011 and SDS021 particle concentration sensor (+0k7 code)
 #define USE_PZEM004T                          // Add support for PZEM004T Energy monitor (+2k code)
 #define USE_IR_REMOTE                         // Send IR remote commands using library IRremoteESP8266 and ArduinoJson (+4k code, 0k3 mem, 48 iram)
   #define USE_IR_HVAC                         // Support for HVAC system using IR (+2k code)
@@ -143,12 +145,23 @@ void WifiWpsStatusCallback(wps_cb_status status);
 #define SWITCH_MODE            TOGGLE         // TOGGLE, FOLLOW or FOLLOW_INV (the wall switch state)
 #endif
 
-#ifndef MQTT_FINGERPRINT
-#define MQTT_FINGERPRINT       "A5 02 FF 13 99 9F 8B 39 8E F1 83 4F 11 23 65 0B 32 36 FC 07"
+#ifndef MQTT_FINGERPRINT1
+#define MQTT_FINGERPRINT1      "A5 02 FF 13 99 9F 8B 39 8E F1 83 4F 11 23 65 0B 32 36 FC 07"
+#endif
+
+#ifndef MQTT_FINGERPRINT2
+#define MQTT_FINGERPRINT2      "A5 02 FF 13 99 9F 8B 39 8E F1 83 4F 11 23 65 0B 32 36 FC 07"
 #endif
 
 #ifndef WS2812_LEDS
 #define WS2812_LEDS            30             // [Pixels] Number of LEDs
+#endif
+
+#ifndef MQTT_MAX_PACKET_SIZE
+#define MQTT_MAX_PACKET_SIZE   1000
+#endif
+#ifndef MQTT_KEEPALIVE
+#define MQTT_KEEPALIVE         15
 #endif
 
 #ifndef MESSZ
@@ -159,7 +172,7 @@ void WifiWpsStatusCallback(wps_cb_status status);
 
 //#include <core_version.h>                   // Arduino_Esp8266 version information (ARDUINO_ESP8266_RELEASE and ARDUINO_ESP8266_RELEASE_2_3_0)
 #ifndef ARDUINO_ESP8266_RELEASE
-#define ARDUINO_ESP8266_RELEASE "STAGED"
+#define ARDUINO_ESP8266_RELEASE "STAGE"
 #endif
 
 #endif  // _SONOFF_POST_H_
