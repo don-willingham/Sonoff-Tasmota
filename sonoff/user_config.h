@@ -73,16 +73,17 @@
 
 // -- Ota -----------------------------------------
 #define OTA_URL                "http://sonoff.maddox.co.uk/tasmota/sonoff.ino.bin"  // [OtaUrl]
+//#define USE_ARDUINO_OTA                          // Add optional support for Arduino OTA (+4k5 code)
 
 /*********************************************************************************************\
  * Select ONE of possible MQTT library types below
 \*********************************************************************************************/
 // Default MQTT driver for both non-TLS and TLS connections. Blocks network if MQTT server is unavailable.
-#define MQTT_LIBRARY_TYPE      1                 // Use PubSubClient library
+#define MQTT_LIBRARY_TYPE      MQTT_PUBSUBCLIENT   // Use PubSubClient library
 // Alternative MQTT driver does not block network when MQTT server is unavailable. No TLS support
-//#define MQTT_LIBRARY_TYPE      2                 // Use TasmotaMqtt library (+4k4 code, +4k mem) - non-TLS only
+//#define MQTT_LIBRARY_TYPE      MQTT_TASMOTAMQTT    // Use TasmotaMqtt library (+4k4 code, +4k mem) - non-TLS only
 // Alternative MQTT driver does not block network when MQTT server is unavailable. No TLS support
-//#define MQTT_LIBRARY_TYPE      3                 // Use (patched) esp-mqtt-arduino library (+4k8 code, +4k mem) - non-TLS only
+//#define MQTT_LIBRARY_TYPE      MQTT_ESPMQTTARDUINO // Use (patched) esp-mqtt-arduino library (+4k8 code, +4k mem) - non-TLS only
 
 // -- MQTT ----------------------------------------
 #define MQTT_USE               1                 // [SetOption3] Select default MQTT use (0 = Off, 1 = On)
@@ -137,7 +138,7 @@
   #define DOMOTICZ_UPDATE_TIMER  0               // [DomoticzUpdateTimer] Send relay status (0 = disable, 1 - 3600 seconds) (Optional)
 
 // -- MQTT - Home Assistant Discovery -------------
-#define USE_HOME_ASSISTANT                       // Enable Home Assistant Discovery Support (+1k4 code)
+#define USE_HOME_ASSISTANT                       // Enable Home Assistant Discovery Support (+2k code)
   #define HOME_ASSISTANT_DISCOVERY_PREFIX "homeassistant"  // Home Assistant discovery prefix
   #define HOME_ASSISTANT_DISCOVERY_ENABLE 0      // [SetOption19] Home Assistant Discovery (0 = Disable, 1 = Enable)
 
@@ -161,6 +162,9 @@
 #define NTP_SERVER1            "pool.ntp.org"       // [NtpServer1] Select first NTP server by name or IP address (129.250.35.250)
 #define NTP_SERVER2            "nl.pool.ntp.org"    // [NtpServer2] Select second NTP server by name or IP address (5.39.184.5)
 #define NTP_SERVER3            "0.nl.pool.ntp.org"  // [NtpServer3] Select third NTP server by name or IP address (93.94.224.67)
+
+#define USE_TIMERS                               // Add support for up to 16 timers (+2k2 code)
+  #define USE_TIMERS_WEB                         // Add timer webpage support (+4k5 code)
 
 // -- Time - Start Daylight Saving Time and timezone offset from UTC in minutes
 #define TIME_DST               North, Last, Sun, Mar, 2, +120  // Northern Hemisphere, Last sunday in march at 02:00 +120 minutes
@@ -203,6 +207,7 @@
   #define USE_HTU                                // Add I2C code for HTU21/SI7013/SI7020/SI7021 sensor (+1k5 code)
   #define USE_BMP                                // Add I2C code for BMP085/BMP180/BMP280/BME280 sensor (+4k code)
 //    #define USE_BME680                           // Add additional support for BME680 sensor using Adafruit Sensor and BME680 libraries (+6k code)
+  #define USE_SGP30                              // Add I2C code for SGP30 sensor (+1k1 code)
   #define USE_BH1750                             // Add I2C code for BH1750 sensor (+0k5 code)
 //  #define USE_VEML6070                           // Add I2C code for VEML6070 sensor (+0k5 code)
 //  #define USE_TSL2561                            // Add I2C code for TSL2561 sensor using library Joba_Tsl2561 (+2k3 code)
@@ -221,6 +226,7 @@
 #define USE_PMS5003                              // Add support for PMS5003 and PMS7003 particle concentration sensor (+1k3 code)
 #define USE_NOVA_SDS                             // Add support for SDS011 and SDS021 particle concentration sensor (+0k7 code)
 #define USE_PZEM004T                             // Add support for PZEM004T Energy monitor (+2k code)
+#define USE_SERIAL_BRIDGE                        // Add support for software Serial Bridge (+0k8 code)
 
 // -- Low level interface devices -----------------
 #define USE_IR_REMOTE                            // Send IR remote commands using library IRremoteESP8266 and ArduinoJson (+4k code, 0k3 mem, 48 iram)
@@ -228,7 +234,7 @@
   #define USE_IR_RECEIVE                         // Support for IR receiver (+5k5 code, 264 iram)
 
 #define USE_WS2812                               // WS2812 Led string using library NeoPixelBus (+5k code, +1k mem, 232 iram) - Disable by //
-  #define USE_WS2812_CTYPE     1                 // WS2812 Color type (0 - RGB, 1 - GRB, 2 - RGBW, 3 - GRBW)
+  #define USE_WS2812_CTYPE     NEO_GRB           // WS2812 Color type (NEO_RGB, NEO_GRB, NEO_BRG, NEO_RBG, NEO_RGBW, NEO_GRBW)
 //  #define USE_WS2812_DMA                         // DMA supports only GPIO03 (= Serial RXD) (+1k mem). When USE_WS2812_DMA is enabled expect Exceptions on Pow
 
 #define USE_ARILUX_RF                            // Add support for Arilux RF remote controller (+0k8 code, 252 iram (non 2.3.0))

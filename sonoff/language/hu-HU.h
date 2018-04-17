@@ -59,7 +59,7 @@
 #define D_BOOT_COUNT "Bootolások száma"
 #define D_BRIGHTLIGHT "Max. fényerő"
 #define D_BUTTON "Gomb"
-#define D_BY "által"                    // Written by me
+#define D_BY "tőle:"                    // Written by me
 #define D_BYTES "Byte-ok"
 #define D_CELSIUS "Celsius"
 #define D_CO2 "Szén-dioxid"
@@ -71,7 +71,7 @@
 #define D_COUNTER "Számláló"
 #define D_CURRENT "Áram"          // As in Voltage and Current
 #define D_DATA "Adat"
-#define D_DARKLIGHT "Min. févnyerő"
+#define D_DARKLIGHT "Min. fényerő"
 #define D_DEBUG "Debug"
 #define D_DISABLED "Letiltva"
 #define D_DNS_SERVER "DNS Szerver"
@@ -142,6 +142,7 @@
 #define D_TOPIC "Téma"
 #define D_TRANSMIT "Továbbít"
 #define D_TRUE "Igaz"
+#define D_TVOC "TVOC"
 #define D_UPGRADE "frissítés"
 #define D_UPLOAD "Feltöltés"
 #define D_UPTIME "Üzemidő"
@@ -210,7 +211,7 @@
 #define D_INFORMATION "Információ"
 #define D_FIRMWARE_UPGRADE "Firmware Frissítés"
 #define D_CONSOLE "Konzol"
-#define D_CONFIRM_RESTART "Újraindítés megerősítése"
+#define D_CONFIRM_RESTART "Újraindítás megerősítése"
 
 #define D_CONFIGURE_MODULE "Eszköz konfiguráció"
 #define D_CONFIGURE_WIFI "WiFi konfiguráció"
@@ -358,6 +359,16 @@
   #define D_DOMOTICZ_AIRQUALITY "Légminőség"
 #define D_DOMOTICZ_UPDATE_TIMER "Update időzítő"
 
+// xdrv_09_timers.ino
+#define D_CONFIGURE_TIMER "Configure Timer"
+#define D_TIMER_PARAMETERS "Timer parameters"
+#define D_TIMER_ARM "Arm"
+#define D_TIMER_TIME "Time"
+#define D_TIMER_DAYS "Days"
+#define D_TIMER_REPEAT "Repeat"
+#define D_TIMER_OUTPUT "Output"
+#define D_TIMER_POWER "Power"
+
 // xdrv_03_energy.ino
 #define D_ENERGY_TODAY "Mai Energia"
 #define D_ENERGY_YESTERDAY "Tegnapi Energia"
@@ -412,6 +423,8 @@
 #define D_SENSOR_BACKLIGHT "Háttérvil"
 #define D_SENSOR_PMS5003  "PMS5003"
 #define D_SENSOR_SDS0X1   "SDS0X1"
+#define D_SENSOR_SBR_RX   "SerBr Rx"
+#define D_SENSOR_SBR_TX   "SerBr Tx"
 
 // Units
 #define D_UNIT_AMPERE "A"
@@ -425,6 +438,7 @@
 #define D_UNIT_MILLIAMPERE "mA"
 #define D_UNIT_MILLISECOND "ms"
 #define D_UNIT_MINUTE "p"
+#define D_UNIT_PARTS_PER_BILLION "ppb"
 #define D_UNIT_PARTS_PER_DECILITER "ppd"
 #define D_UNIT_PARTS_PER_MILLION "ppm"
 #define D_UNIT_PRESSURE "hPa"
@@ -459,4 +473,4 @@
 #define D_LOG_UPNP "UPP: "         // UPnP
 #define D_LOG_WIFI "WIF: "         // Wifi
 
-#endif  // _LANGUAGE_EN_GB_H_
+#endif  // _LANGUAGE_HU_HU_H_

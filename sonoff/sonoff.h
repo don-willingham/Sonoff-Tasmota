@@ -43,6 +43,7 @@ typedef unsigned long power_t;              // Power (Relay) type
 #define MAX_SWITCHES           4            // Max number of switches
 #define MAX_PWMS               5            // Max number of PWM channels
 #define MAX_COUNTERS           4            // Max number of counter sensors
+#define MAX_TIMERS             16           // Max number of Timers
 #define MAX_PULSETIMERS        8            // Max number of supported pulse timers
 #define MAX_FRIENDLYNAMES      4            // Max number of Friendly names
 #define MAX_DOMOTICZ_IDX       4            // Max number of Domoticz device, key and switch indices
@@ -79,6 +80,7 @@ typedef unsigned long power_t;              // Power (Relay) type
 #define MAX_POWER_RETRY        5            // Retry count allowing agreed power limit overflow
 
 #define STATES                 20           // State loops per second
+#define IMMINENT_RESET_FACTOR  10           // Factor to extent button hold time for imminent Reset to default 40 seconds using KEY_HOLD_TIME of 40
 #define SYSLOG_TIMER           600          // Seconds to restore syslog_level
 #define SERIALLOG_TIMER        600          // Seconds to disable SerialLog
 #define OTA_ATTEMPTS           5            // Number of times to try fetching the new firmware
@@ -95,10 +97,12 @@ typedef unsigned long power_t;              // Power (Relay) type
   #define WEB_LOG_SIZE         4000         // Max number of characters in weblog
 #endif
 
-#define MAX_BACKLOG            16           // Max number of commands in backlog (chk backlog_index and backlog_pointer code)
+#define MAX_BACKLOG            30           // Max number of commands in backlog
 #define MIN_BACKLOG_DELAY      2            // Minimal backlog delay in 0.1 seconds
 
+#define SOFT_BAUDRATE          9600         // Default software serial baudrate
 #define APP_BAUDRATE           115200       // Default serial baudrate
+#define SERIAL_POLLING         100          // Serial receive polling in ms
 #define MAX_STATUS             11           // Max number of status lines
 
 /*
@@ -106,6 +110,19 @@ typedef unsigned long power_t;              // Power (Relay) type
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 */
+
+//enum ws2812NeopixelbusFeature { NEO_RGB, NEO_GRB, NEO_BRG, NEO_RBG, NEO_3LED, NEO_RGBW, NEO_GRBW };  // Doesn't work
+#define NEO_RGB                0            // Neopixel RGB leds
+#define NEO_GRB                1            // Neopixel GRB leds
+#define NEO_BRG                2            // Neopixel BRG leds
+#define NEO_RBG                3            // Neopixel RBG leds
+#define NEO_3LED               4            // Placeholder to test for 4 led types
+#define NEO_RGBW               5            // Neopixel RGBW leds
+#define NEO_GRBW               6            // Neopixel GRBW leds
+
+#define MQTT_PUBSUBCLIENT      1            // Mqtt PubSubClient library
+#define MQTT_TASMOTAMQTT       2            // Mqtt TasmotaMqtt library based on esp-mqtt-arduino
+#define MQTT_ESPMQTTARDUINO    3            // Mqtt esp-mqtt-arduino library by Ingo Randolf
 
 /*********************************************************************************************\
  * Enumeration
