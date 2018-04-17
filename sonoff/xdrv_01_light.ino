@@ -991,11 +991,10 @@ boolean LightColorEntry(char *buffer, uint8_t buffer_length)
         light_entry_color[i++] = atoi(str);
       }
     }
-//    entry_type = (light_subtype == i) ? 2 : 0;      // Decimal
     entry_type = 2;                                 // Decimal
   }
-  else if ((2 * light_subtype) == buffer_length) {  // Hexadecimal entry
-    for (byte i = 0; i < light_subtype; i++) {
+  else if (((2 * light_subtype) == buffer_length) || (buffer_length > 3)) {  // Hexadecimal entry
+    for (byte i = 0; i < buffer_length / 2; i++) {
       strlcpy(scolor, buffer + (i *2), 3);
       light_entry_color[i] = (uint8_t)strtol(scolor, &p, 16);
     }
@@ -1116,7 +1115,7 @@ boolean LightCommand()
     if (XdrvMailbox.data_len > 0) {
       char *p;
       uint16_t idx = XdrvMailbox.index;
-      for (char *color = strtok_r(XdrvMailbox.data, ".", &p); color; color = strtok_r(NULL, ".", &p)) {
+      for (char *color = strtok_r(XdrvMailbox.data, " ", &p); color; color = strtok_r(NULL, " ", &p)) {
         if (LightColorEntry(color, strlen(color))) {
           Ws2812SetColor(idx, light_entry_color[0], light_entry_color[1], light_entry_color[2], light_entry_color[3]);
           idx++;

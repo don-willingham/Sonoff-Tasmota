@@ -192,6 +192,37 @@ size_t strchrspn(const char *str1, int character)
   return ret;
 }
 
+double CharToDouble(char *str)
+{
+  // simple ascii to double, because atof or strtod are too large
+  char strbuf[24];
+
+  strcpy(strbuf, str);
+  char *pt;
+  double left = atoi(strbuf);
+  double right = 0;
+  short len = 0;
+  pt = strtok (strbuf, ".");
+  if (pt) {
+    pt = strtok (NULL, ".");
+    if (pt) {
+      right = atoi(pt);
+      len = strlen(pt);
+      double fac = 1;
+      while (len) {
+        fac /= 10.0;
+        len--;
+      }
+      // pow is also very large
+      //double fac=pow(10,-len);
+      right *= fac;
+    }
+  }
+  double result = left + right;
+  if (left < 0) { result = left - right; }
+  return result;
+}
+
 char* dtostrfd(double number, unsigned char prec, char *s)
 {
   return dtostrf(number, 1, prec, s);
@@ -588,7 +619,7 @@ void WifiConfig(uint8_t type)
     if (type >= WIFI_RETRY) {  // WIFI_RETRY and WIFI_WAIT
       return;
     }
-#ifdef USE_EMULATION
+#if defined(USE_WEBSERVER) && defined(USE_EMULATION)
     UdpDisconnect();
 #endif  // USE_EMULATION
     WiFi.disconnect();        // Solve possible Wifi hangs
@@ -624,7 +655,7 @@ void WifiBegin(uint8_t flag)
 {
   const char kWifiPhyMode[] = " BGN";
 
-#ifdef USE_EMULATION
+#if defined(USE_WEBSERVER) && defined(USE_EMULATION)
   UdpDisconnect();
 #endif  // USE_EMULATION
 
@@ -811,7 +842,7 @@ void WifiCheck(uint8_t param)
 #endif  // USE_EMULATION
 #endif  // USE_WEBSERVER
       } else {
-#ifdef USE_EMULATION
+#if defined(USE_WEBSERVER) && defined(USE_EMULATION)
         UdpDisconnect();
 #endif  // USE_EMULATION
         mdns_begun = false;
@@ -1077,6 +1108,7 @@ uint32_t standard_time = 0;
 uint32_t ntp_time = 0;
 uint32_t midnight = 1451602800;
 uint32_t restart_time = 0;
+int16_t  time_timezone = 0;  // Timezone * 10
 uint8_t  midnight_now = 0;
 uint8_t  ntp_sync_minute = 0;
 
@@ -1325,8 +1357,8 @@ boolean MidnightNow()
 
 void RtcSecond()
 {
-  uint32_t stdoffset;
-  uint32_t dstoffset;
+  int32_t stdoffset;
+  int32_t dstoffset;
   TIME_T tmpTime;
 
   if ((ntp_sync_minute > 59) && (RtcTime.minute > 2)) ntp_sync_minute = 1;                 // If sync prepare for a new cycle
@@ -1346,6 +1378,14 @@ void RtcSecond()
       snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_APPLICATION "(" D_UTC_TIME ") %s, (" D_DST_TIME ") %s, (" D_STD_TIME ") %s"),
         GetTime(0).c_str(), GetTime(2).c_str(), GetTime(3).c_str());
       AddLog(LOG_LEVEL_DEBUG);
+#ifdef USE_RULES
+      if (local_time < 1451602800) {  // 2016-01-01
+        strncpy_P(mqtt_data, PSTR("{\"Time\":{\"Initialized\":1}}"), sizeof(mqtt_data));
+      } else {
+        strncpy_P(mqtt_data, PSTR("{\"Time\":{\"Set\":1}}"), sizeof(mqtt_data));
+      }
+      RulesProcess();
+#endif  // USE_RULES
     } else {
       ntp_sync_minute++;  // Try again in next minute
     }
@@ -1353,6 +1393,7 @@ void RtcSecond()
   utc_time++;
   local_time = utc_time;
   if (local_time > 1451602800) {  // 2016-01-01
+    int32_t time_offset = Settings.timezone * SECS_PER_HOUR;
     if (99 == Settings.timezone) {
       if (DaylightSavingTime.hemis) {
         dstoffset = StandardTime.offset * SECS_PER_MIN;  // Southern hemisphere
@@ -1362,13 +1403,13 @@ void RtcSecond()
         stdoffset = StandardTime.offset * SECS_PER_MIN;
       }
       if ((utc_time >= (daylight_saving_time - stdoffset)) && (utc_time < (standard_time - dstoffset))) {
-        local_time += dstoffset;  // Daylight Saving Time
+        time_offset = dstoffset;  // Daylight Saving Time
       } else {
-        local_time += stdoffset;  // Standard Time
+        time_offset = stdoffset;  // Standard Time
       }
-    } else {
-      local_time += Settings.timezone * SECS_PER_HOUR;
     }
+    local_time += time_offset;
+    time_timezone = time_offset / 360;  // (SECS_PER_HOUR / 10) fails as it is defined as UL
   }
   BreakTime(local_time, RtcTime);
   if (!RtcTime.hour && !RtcTime.minute && !RtcTime.second && RtcTime.valid) {
@@ -1554,10 +1595,10 @@ void AddLog_P(byte loglevel, const char *formatP, const char *formatP2)
   AddLog(loglevel);
 }
 
-void AddLogSerial(byte loglevel, uint8_t *buffer, byte count)
+void AddLogSerial(byte loglevel, uint8_t *buffer, int count)
 {
   snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_SERIAL D_RECEIVED));
-  for (byte i = 0; i < count; i++) {
+  for (int i = 0; i < count; i++) {
     snprintf_P(log_data, sizeof(log_data), PSTR("%s %02X"), log_data, *(buffer++));
   }
   AddLog(loglevel);

@@ -28,6 +28,7 @@
  * Use online command StateText to translate ON, OFF, HOLD and TOGGLE.
  * Use online command Prefix to translate cmnd, stat and tele.
  *
+ * Updated until v5.12.0e
 \*********************************************************************/
 
 //#define LANGUAGE_MODULE_NAME         // Enable to display "Module Generic" (ie Spanish), Disable to display "Generic Module" (ie English)
@@ -77,6 +78,7 @@
 #define D_DNS_SERVER "DNS Szerver"
 #define D_DONE "Kész"
 #define D_DST_TIME "DST"
+#define D_ECO2 "eCO2"
 #define D_EMULATION "Emuláció"
 #define D_ENABLED "Engedélyezve"
 #define D_ERASE "Törlés"
@@ -127,6 +129,7 @@
 #define D_RESTART_REASON "Újraindítás oka:"
 #define D_RESTORE "Visszaállítás"
 #define D_RETAINED "mentve"
+#define D_RULE "Rule"
 #define D_SAVE "Mentés"
 #define D_SENSOR "Szenzor"
 #define D_SSID "SSId"
@@ -136,6 +139,8 @@
 #define D_SUBNET_MASK "Subnet Mask"
 #define D_SUBSCRIBE_TO "Feliratkozás a"
 #define D_SUCCESSFUL "Sikeres"
+#define D_SUNRISE "Sunrise"
+#define D_SUNSET "Sunset"
 #define D_TEMPERATURE "Hőmérséklet"
 #define D_TO "-nak"
 #define D_TOGGLE "Toggle"
@@ -367,7 +372,7 @@
 #define D_TIMER_DAYS "Days"
 #define D_TIMER_REPEAT "Repeat"
 #define D_TIMER_OUTPUT "Output"
-#define D_TIMER_POWER "Power"
+#define D_TIMER_ACTION "Action"
 
 // xdrv_03_energy.ino
 #define D_ENERGY_TODAY "Mai Energia"

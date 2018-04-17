@@ -33,6 +33,12 @@ void WifiWpsStatusCallback(wps_cb_status status);
 }
 #endif
 
+#ifdef USE_KNX
+#include <esp-knx-ip.h>
+
+void KNX_CB_Action(message_t const &msg, void *arg);
+#endif  // USE_KNX
+
 #define USE_DHT                               // Default DHT11 sensor needs no external library
 
 #ifdef USE_ALL_SENSORS  // ===================== Configure sonoff-xxl.bin =========================
@@ -104,6 +110,9 @@ void WifiWpsStatusCallback(wps_cb_status status);
 #endif
 #ifdef USE_TIMERS
 #undef USE_TIMERS                             // Disable support for up to 16 timers
+#endif
+#ifdef USE_SUNRISE
+#undef USE_SUNRISE                            // Disable support for Sunrise and sunset tools
 #endif
 #ifdef USE_PZEM004T
 #undef USE_PZEM004T                           // Disable PZEM004T energy sensor

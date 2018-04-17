@@ -77,6 +77,7 @@
 #define D_DNS_SERVER "DNS Server"
 #define D_DONE "Done"
 #define D_DST_TIME "DST"
+#define D_ECO2 "eCO2"
 #define D_EMULATION "Emulation"
 #define D_ENABLED "Enabled"
 #define D_ERASE "Erase"
@@ -127,6 +128,7 @@
 #define D_RESTART_REASON "Restart Reason"
 #define D_RESTORE "restore"
 #define D_RETAINED "retained"
+#define D_RULE "Rule"
 #define D_SAVE "Save"
 #define D_SENSOR "Sensor"
 #define D_SSID "SSId"
@@ -136,6 +138,8 @@
 #define D_SUBNET_MASK "Subnet Mask"
 #define D_SUBSCRIBE_TO "Subscribe to"
 #define D_SUCCESSFUL "Successful"
+#define D_SUNRISE "Sunrise"
+#define D_SUNSET "Sunset"
 #define D_TEMPERATURE "Temperature"
 #define D_TO "to"
 #define D_TOGGLE "Toggle"
@@ -375,7 +379,7 @@
 #define D_TIMER_DAYS "Days"
 #define D_TIMER_REPEAT "Repeat"
 #define D_TIMER_OUTPUT "Output"
-#define D_TIMER_POWER "Power"
+#define D_TIMER_ACTION "Action"
 
 // xdrv_03_energy.ino
 #define D_ENERGY_TODAY "Energy Today"

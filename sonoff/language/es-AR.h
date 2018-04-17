@@ -28,6 +28,7 @@
  * Use online command StateText to translate ON, OFF, HOLD and TOGGLE.
  * Use online command Prefix to translate cmnd, stat and tele.
  *
+ * Updated until v5.12.0k
 \*********************************************************************/
 
 #define LANGUAGE_MODULE_NAME         // Enable to display "Module Generic" (ie Spanish), Disable to display "Generic Module" (ie English)
@@ -77,6 +78,7 @@
 #define D_DNS_SERVER "DNS Server"
 #define D_DONE "Listo"
 #define D_DST_TIME "DST"
+#define D_ECO2 "eCO2"
 #define D_EMULATION "Emulación"
 #define D_ENABLED "Habilitado"
 #define D_ERASE "Borrar"
@@ -127,6 +129,7 @@
 #define D_RESTART_REASON "Causa Reinicio"
 #define D_RESTORE "Restauración"
 #define D_RETAINED "Grabado"
+#define D_RULE "Rule"
 #define D_SAVE "Grabar"
 #define D_SENSOR "Sensor"
 #define D_SSID "SSId"
@@ -136,6 +139,8 @@
 #define D_SUBNET_MASK "Máscara Subred"
 #define D_SUBSCRIBE_TO "Suscribir a"
 #define D_SUCCESSFUL "Exitosa"
+#define D_SUNRISE "Salida del Sol"
+#define D_SUNSET "Puesta del Sol"
 #define D_TEMPERATURE "Temperatura"
 #define D_TO "a"
 #define D_TOGGLE "Conmutar"
@@ -375,7 +380,7 @@
 #define D_TIMER_DAYS "Días"
 #define D_TIMER_REPEAT "Repetir"
 #define D_TIMER_OUTPUT "Salida"
-#define D_TIMER_POWER "Estado"
+#define D_TIMER_ACTION "Estado"
 
 // xdrv_03_energy.ino
 #define D_ENERGY_TODAY "Energía Hoy"

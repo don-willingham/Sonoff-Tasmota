@@ -28,6 +28,7 @@
  * Use online command StateText to translate ON, OFF, HOLD and TOGGLE.
  * Use online command Prefix to translate cmnd, stat and tele.
  *
+ * Updated until v5.12.0l
 \*********************************************************************/
 
 //#define LANGUAGE_MODULE_NAME         // Enable to display "Module Generic" (ie Spanish), Disable to display "Generic Module" (ie English)
@@ -77,6 +78,7 @@
 #define D_DNS_SERVER "DNS Server"
 #define D_DONE "Klaar"
 #define D_DST_TIME "ZT"
+#define D_ECO2 "eCO2"
 #define D_EMULATION "Emulatie"
 #define D_ENABLED "Geactiveerd"
 #define D_ERASE "Wissen"
@@ -127,6 +129,7 @@
 #define D_RESTART_REASON "Reden herstart"
 #define D_RESTORE "herstellen"
 #define D_RETAINED "retained"
+#define D_RULE "Regel"
 #define D_SAVE "Opslaan"
 #define D_SENSOR "Sensor"
 #define D_SSID "SSId"
@@ -136,6 +139,8 @@
 #define D_SUBNET_MASK "Subnet Masker"
 #define D_SUBSCRIBE_TO "Abonneer op"
 #define D_SUCCESSFUL "Gelukt"
+#define D_SUNRISE "Zonsopgang"
+#define D_SUNSET "Zonsondergang"
 #define D_TEMPERATURE "Temperatuur"
 #define D_TO "naar"
 #define D_TOGGLE "Toggle"  // Wissel, Tuimel
@@ -375,7 +380,7 @@
 #define D_TIMER_DAYS "Dagen"
 #define D_TIMER_REPEAT "Herhaal"
 #define D_TIMER_OUTPUT "Uitgang"
-#define D_TIMER_POWER "Actie"
+#define D_TIMER_ACTION "Actie"
 
 // xdrv_03_energy.ino
 #define D_ENERGY_TODAY "Verbruik vandaag"

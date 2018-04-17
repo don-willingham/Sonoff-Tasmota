@@ -54,6 +54,13 @@
 #define HOME_ASSISTANT_DISCOVERY_ENABLE 0
 #endif
 
+#ifndef LATITUDE
+#define LATITUDE               48.858360         // [Latitude] Your location to be used with sunrise and sunset
+#endif
+#ifndef LONGITUDE
+#define LONGITUDE              2.294442          // [Longitude] Your location to be used with sunrise and sunset
+#endif
+
 /*********************************************************************************************\
  * RTC memory
 \*********************************************************************************************/
@@ -597,6 +604,9 @@ void SettingsDefaultSet2()
 
   // 5.10.1
   SettingsDefaultSet_5_10_1();
+
+  Settings.latitude = (int)((double)LATITUDE * 1000000);
+  Settings.longitude = (int)((double)LONGITUDE * 1000000);
 }
 
 /********************************************************************************************/
@@ -912,6 +922,14 @@ void SettingsDelta()
     }
     if (Settings.version < 0x050C0009) {
       memset(&Settings.timer, 0x00, sizeof(Timer) * MAX_TIMERS);
+    }
+    if (Settings.version < 0x050C000A) {
+      Settings.latitude = (int)((double)LATITUDE * 1000000);
+      Settings.longitude = (int)((double)LONGITUDE * 1000000);
+    }
+    if (Settings.version < 0x050C000B) {
+      memset(&Settings.free_6b8, 0x00, sizeof(Settings.free_6b8));
+      memset(&Settings.rules, 0x00, sizeof(Settings.rules));
     }
 
     Settings.version = VERSION;

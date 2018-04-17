@@ -28,6 +28,7 @@
  * Use online command StateText to translate ON, OFF, HOLD and TOGGLE.
  * Use online command Prefix to translate cmnd, stat and tele.
  *
+ * Updated until v5.12.0d
 \*********************************************************************/
 
 //#define LANGUAGE_MODULE_NAME         // Enable to display "Module Generic" (ie Spanish), Disable to display "Generic Module" (ie English)
@@ -77,6 +78,7 @@
 #define D_DNS_SERVER "DNS伺服器"
 #define D_DONE "完成"
 #define D_DST_TIME "DST"
+#define D_ECO2 "eCO2"
 #define D_EMULATION "設備模擬"
 #define D_ENABLED "啟用"
 #define D_ERASE "刪除"
@@ -127,6 +129,7 @@
 #define D_RESTART_REASON "重啟原因"
 #define D_RESTORE "恢覆"
 #define D_RETAINED "已保留"
+#define D_RULE "Rule"
 #define D_SAVE "存檔"
 #define D_SENSOR "感測器"
 #define D_SSID "名稱"
@@ -136,6 +139,8 @@
 #define D_SUBNET_MASK "子網遮罩"
 #define D_SUBSCRIBE_TO "訂閱"
 #define D_SUCCESSFUL "成功"
+#define D_SUNRISE "Sunrise"
+#define D_SUNSET "Sunset"
 #define D_TEMPERATURE "溫度"
 #define D_TO "to"
 #define D_TOGGLE "切換"
@@ -367,7 +372,7 @@
 #define D_TIMER_DAYS "Days"
 #define D_TIMER_REPEAT "Repeat"
 #define D_TIMER_OUTPUT "Output"
-#define D_TIMER_POWER "Power"
+#define D_TIMER_ACTION "Action"
 
 // xdrv_03_energy.ino
 #define D_ENERGY_TODAY "今日用電量"

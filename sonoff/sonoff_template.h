@@ -487,7 +487,7 @@ const mytmplt kModules[MAXMODULE] PROGMEM = {
      GPIO_USER,        // GPIO05 Optional sensor
      0, 0, 0, 0, 0, 0, // Flash connection
      GPIO_USER,        // GPIO12
-     GPIO_LED1_INV,    // GPIO13 BLUE LED
+     GPIO_USER,        // GPIO13 BLUE LED
      GPIO_USER,        // GPIO14 Optional sensor
      0,                // GPIO15
      0,                // GPIO16
@@ -498,12 +498,12 @@ const mytmplt kModules[MAXMODULE] PROGMEM = {
      GPIO_LED1,        // GPIO01 Green LED
      GPIO_TXD,         // GPIO02 RX - Pin next to TX on the PCB
      GPIO_RXD,         // GPIO03 TX - Pin next to GND on the PCB
-     GPIO_USER,        // GPIO04 W2 - PWM5
+     GPIO_PWM5,        // GPIO04 W2 - PWM5
      GPIO_LED2_INV,    // GPIO05 Red LED
      0, 0, 0, 0, 0, 0, // Flash connection
      GPIO_PWM3,        // GPIO12 Blue
      GPIO_PWM2,        // GPIO13 Green
-     GPIO_USER,        // GPIO14 W1 - PWM4
+     GPIO_PWM4,        // GPIO14 W1 - PWM4
      GPIO_PWM1,        // GPIO15 Red
      0, 0
   },
