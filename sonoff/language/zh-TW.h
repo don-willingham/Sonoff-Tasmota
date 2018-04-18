@@ -266,7 +266,15 @@
 #define D_TELEMETRY_PERIOD "上報周期"
 
 #define D_OTHER_PARAMETERS "其他設置"
+#ifdef WEB_PASSWORD_2X
+#define D_WEB_ADMIN_PASSWORD_CURR "WEB管理密碼"
+#define D_WEB_ADMIN_PASSWORD_INC "WEB管理密碼"
+#define D_WEB_ADMIN_PASSWORD_NEW "WEB管理密碼"
+#define D_WEB_ADMIN_PASSWORD_RPT "WEB管理密碼"
+#define D_WEB_ADMIN_PASSWORD_DIFF "WEB管理密碼"
+#else
 #define D_WEB_ADMIN_PASSWORD "WEB管理密碼"
+#endif
 #define D_MQTT_ENABLE "啟用MQTT"
 #define D_FRIENDLY_NAME "昵稱"
 #define D_BELKIN_WEMO "貝爾金 WeMo"

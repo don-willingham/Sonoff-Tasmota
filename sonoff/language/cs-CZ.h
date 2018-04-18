@@ -266,7 +266,15 @@
 #define D_TELEMETRY_PERIOD "Interval telemetrie"
 
 #define D_OTHER_PARAMETERS "Další nastavení"
+#ifdef WEB_PASSWORD_2X
+#define D_WEB_ADMIN_PASSWORD_CURR "Heslo Web administrátora"
+#define D_WEB_ADMIN_PASSWORD_INC "Heslo Web administrátora"
+#define D_WEB_ADMIN_PASSWORD_NEW "Heslo Web administrátora"
+#define D_WEB_ADMIN_PASSWORD_RPT "Heslo Web administrátora"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Heslo Web administrátora"
+#else
 #define D_WEB_ADMIN_PASSWORD "Heslo Web administrátora"
+#endif
 #define D_MQTT_ENABLE "MQTT aktivní"
 #define D_FRIENDLY_NAME "Friendly Name"
 #define D_BELKIN_WEMO "Belkin WeMo"

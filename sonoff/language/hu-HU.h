@@ -266,7 +266,15 @@
 #define D_TELEMETRY_PERIOD "Telemetria (sec)"
 
 #define D_OTHER_PARAMETERS "Egyéb paraméterek"
+#ifdef WEB_PASSWORD_2X
+#define D_WEB_ADMIN_PASSWORD_CURR "Web Admin Jelszó"
+#define D_WEB_ADMIN_PASSWORD_INC "Web Admin Jelszó"
+#define D_WEB_ADMIN_PASSWORD_NEW "Web Admin Jelszó"
+#define D_WEB_ADMIN_PASSWORD_RPT "Web Admin Jelszó"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Web Admin Jelszó"
+#else
 #define D_WEB_ADMIN_PASSWORD "Web Admin Jelszó"
+#endif
 #define D_MQTT_ENABLE "MQTT engedélyezés"
 #define D_FRIENDLY_NAME "Név"
 #define D_BELKIN_WEMO "Belkin WeMo"

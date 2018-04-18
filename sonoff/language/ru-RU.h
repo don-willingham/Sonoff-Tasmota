@@ -266,7 +266,15 @@
 #define D_TELEMETRY_PERIOD "Период телеметрии"
 
 #define D_OTHER_PARAMETERS "Параметры Прочие"
+#ifdef WEB_PASSWORD_2X
+#define D_WEB_ADMIN_PASSWORD_CURR "Пароль Web администратора"
+#define D_WEB_ADMIN_PASSWORD_INC "Пароль Web администратора"
+#define D_WEB_ADMIN_PASSWORD_NEW "Пароль Web администратора"
+#define D_WEB_ADMIN_PASSWORD_RPT "Пароль Web администратора"
+#define D_WEB_ADMIN_PASSWORD_DIFF "Пароль Web администратора"
+#else
 #define D_WEB_ADMIN_PASSWORD "Пароль Web администратора"
+#endif
 #define D_MQTT_ENABLE "MQTT активен"
 #define D_FRIENDLY_NAME "Дружественное Имя"
 #define D_BELKIN_WEMO "Belkin WeMo"
